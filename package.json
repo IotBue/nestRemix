@@ -1,0 +1,29 @@
+{
+  "name": "nest-remix-server",
+  "version": "0.0.1",
+  "description": "Node.js server for Nest Remix IOT demo.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "~4.9.x",
+    "pg": "2.x",
+    "socket.io": "~0.9.6",
+    "node-osc": "~0.3.0"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cran-io/nest-remix-server"
+  },
+  "keywords": [
+    "nest",
+    "node",
+    "socket.io",
+    "osc"
+  ],
+  "license": "MIT"
+}
