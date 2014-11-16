@@ -1,0 +1,30 @@
+{
+  "name": "nest-remix-server",
+  "version": "0.0.1",
+  "description": "Nest Remix for IOTBUE ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+ "dependencies": {
+    "express": "~4.2.0",
+    "static-favicon": "~1.0.0",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "debug": "~0.7.4",
+    "ejs": "*",
+    "node-osc": "~0.3.0",
+    "socket.io": "~0.9.6"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "keywords": [
+    "nest",
+    "node",
+    "socket.io",
+    "osc"
+  ],
+  "license": "MIT"
+}

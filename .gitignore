@@ -1,0 +1,3 @@
+server/node_modules/.bin/express
+server/node_modules/.bin/jade
+node_modules/*
