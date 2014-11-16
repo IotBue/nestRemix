@@ -1,6 +1,6 @@
 $(function(){
 
-    var serverName = window.location.protocol + "://" + window.location.host;
+    var serverName = window.location.protocol + "//" + window.location.host;
     var sockets;
     if (window.location.host.indexOf('local') > -1){
       socket = io();
