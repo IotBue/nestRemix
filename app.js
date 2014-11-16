@@ -28,6 +28,9 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//add this so the browser can GET the bower files
+app.use('/js/bower_components', express.static(__dirname + '/js/bower_components'));
+
 app.use('/', routes);
 app.use('/users', users);
 
@@ -95,13 +98,9 @@ var io = socket.listen(server);
 //some web-client connects
 io.sockets.on('connection', function (socket) {
   console.log("connnect");
-  //msg sent whenever someone connects
-  socket.emit("serverMsg",{txt:"Connected to server"});
-  
-
 
   
-  
+
   //Please Remove 
   setInterval(function(){
 
