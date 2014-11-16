@@ -1,7 +1,7 @@
 $(function(){
 
     var serverName = window.location.protocol + "//" + window.location.host;
-    var sockets;
+    var socket;
     if (window.location.host.indexOf('local') > -1){
       socket = io();
     }
@@ -18,4 +18,5 @@ $(function(){
     socket.on('presure', function(data){
             $('.presion').html(data.value);
     });
+
 });
