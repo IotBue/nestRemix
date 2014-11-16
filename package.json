@@ -15,7 +15,7 @@
     "debug": "~0.7.4",
     "ejs": "*",
     "node-osc": "~0.3.0",
-    "socket.io": "~0.9.6"
+    "socket.io": "^1.0.6"
   },
   "engines": {
     "node": "0.10.x"

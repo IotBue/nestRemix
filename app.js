@@ -75,12 +75,43 @@ var oscClient = new osc.Client('127.0.0.1', 3333);
 //io sockets would address to all the web-clients talking to this nodejs server
 var io = socket.listen(server);
 
+
+
+
 //some web-client connects
 io.sockets.on('connection', function (socket) {
   console.log("connnect");
   //msg sent whenever someone connects
   socket.emit("serverMsg",{txt:"Connected to server"});
   
+
+
+  
+  
+  //Please Remove 
+  setInterval(function(){
+
+
+    //TODO: Reeplace for real value
+    var temp = Math.floor((Math.random() * 20) + 20);
+    var tempMsg = {value: temp};
+    socket.emit('temp',tempMsg);
+    
+    //TODO: Reeplace for real value
+    var humity = Math.floor((Math.random() * 100) + 0);
+    var humityMsg = {value: humity};
+    socket.emit('humity', humityMsg);
+    
+    //TODO: Reeplace for real value
+    var presure = Math.floor((Math.random() * -300) + 1300);
+    var presureMsg = {value: presure};
+    socket.emit('presure',presureMsg );
+  
+  },1000);  
+
+
+
+
   //some web-client disconnects
   socket.on('disconnect', function (socket) {
     console.log("disconnect");

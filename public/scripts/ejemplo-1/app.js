@@ -1,0 +1,21 @@
+$(function(){
+
+    var serverName = window.location.protocol + "://" + window.location.host;
+    var sockets;
+    if (window.location.host.indexOf('local') > -1){
+      socket = io();
+    }
+    else {
+      sockets = io(serverName);
+    }
+    
+    socket.on('temp', function(data){
+            $('.temperatura').html(data.value);
+    });
+    socket.on('humity', function(data){
+            $('.humedad').html(data.value);
+    });
+    socket.on('presure', function(data){
+            $('.presion').html(data.value);
+    });
+});
