@@ -6,7 +6,7 @@ $(function(){
       socket = io();
     }
     else {
-      sockets = io(serverName);
+      socket = io(serverName);
     }
     
     socket.on('temp', function(data){
