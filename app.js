@@ -8,8 +8,14 @@ var bodyParser = require('body-parser');
 var http = require('http');
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
+var bodyParser = require('body-parser');
+  
 var app = express();
+
+app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,6 +33,14 @@ app.use('/js/bower_components', express.static(__dirname + '/js/bower_components
 
 app.use('/', routes);
 app.use('/users', users);
+
+// assuming POST: temp=foo        <-- URL encoding
+// or       POST: {"temp":"foo"}  <-- JSON encoding
+app.post('/test', function(req, res) {
+    var temp = req.body.temp;
+    console.log(temp);
+    res.json("OK");
+});
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
