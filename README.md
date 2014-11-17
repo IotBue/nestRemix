@@ -6,16 +6,6 @@ nest-remix
 Nest Remix is a open source project developed to teach with a little first project with Internet of Things.
 
 
-
-Authors
-============
-* [Javier Velazquez Traut] y [Sebi] de [CRAN.IO]
-* [Patagonia Tec]
-* [Martín Rabaglia]
-* [Cristian Reynaga] de [IoTBue]
-* [IoTBue]
-
-
 ### Version
 0.0.1
 
@@ -36,6 +26,16 @@ Nest Remix uses a number of open source projects and frameworks:
 
 Reference
 =========
+
+
+
+Authors
+============
+* [Javier Velazquez Traut] y [Sebi] de [CRAN.IO]
+* [Patagonia Tec]
+* [Martín Rabaglia]
+* [Cristian Reynaga] de [IoTBue]
+* [IoTBue]
 
 
 
