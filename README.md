@@ -6,13 +6,13 @@ Nest Remix is a open source project developed to teach with a little first proje
 
 
 
-Contributors
+Authors
 ============
-[Javier Velazquez Traut] y [Sebi] de [CRAN.IO]
-[Patagonia Tec]
-[Martín Rabaglia]
-[Cristian Reynaga] de [IoTBue]
-[IoTBue]
+* [Javier Velazquez Traut] y [Sebi] de [CRAN.IO]
+* [Patagonia Tec]
+* [Martín Rabaglia]
+* [Cristian Reynaga] de [IoTBue]
+* [IoTBue]
 
 
 ### Version
@@ -48,8 +48,8 @@ Free to use
 
 
 [AngularJS]: http://angularjs.org
-[Javier Velazquez Traut]
-[Sebi]
+[Javier Velazquez Traut]: http://cran.io
+[Sebi]: http://cran.io
 [CRAN.IO]: http://cran.io
 [Patagonia Tec]: http://patagoniatecnology.com
 [Martín Rabaglia]: http://twitter.com/sr_humo
