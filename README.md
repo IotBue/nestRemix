@@ -22,11 +22,11 @@ Contributors
 
 Nest Remix uses a number of open source projects and frameworks:
 
-*[Node.js]
-*[Express]
-*[Bower]
-*[Arduino]
-*[node.js]
+* [Node.js]
+* [Express]
+* [Bower]
+* [Arduino]
+* [node.js]
 
 
 ### To Do
