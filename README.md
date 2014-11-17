@@ -5,9 +5,10 @@ nest-remix
 Node.js server for Nest Remix IOT demo.
 
 
-###Version
+### Version
+0.0.1
 
-###Tech
+### Tech
 
 Nest Remix uses a number of open source projects and frameworks:
 
@@ -18,10 +19,13 @@ Nest Remix uses a number of open source projects and frameworks:
 *[node.js]
 
 
-###To Do
+### To Do
 - Update Documentation
 - Create slides
 - Create Graphics and schematics
+
+Reference
+====
 
 License
 -------
@@ -29,3 +33,6 @@ License
 Free to use
 
 **Enjoy, learn and teach!**
+
+
+[AngularJS]: http://angularjs.org
