@@ -149,7 +149,7 @@ socket = io.sockets.on('connection', function (socket) {
     var pressure = Math.floor((Math.random() * -300) + 1300);
     var isDeviceOn = Math.random() > 0.5;
 
-    showData(temp,humidity,pressure,isDeviceOn);
+    //showData(temp,humidity,pressure,isDeviceOn);
   
   },2000); 
   setInterval(function(){
