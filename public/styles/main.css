@@ -66,3 +66,31 @@ svg {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges; }
+
+
+
+
+
+img.icon { 
+	/* background-color: #fff; */
+	color: #fff;
+	-webkit-filter: invert(100%);
+	filter: invert(100%);
+	min-width: 50px;
+	position: absolute;
+	line-height: 0;
+	top: 0;
+	width: 100%;
+	left: 0;
+	text-align: center;
+	color: #fff;
+	padding: 10px;
+}
+
+
+
+
+
+
+
+
