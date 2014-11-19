@@ -16,9 +16,12 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
+
+
+//TODO: MOVE TO ROUTER.
 // assuming POST: temp=foo        <-- URL encoding
 // or       POST: {"temp":"foo"}  <-- JSON encoding
-app.post('/test', function(req, res) {
+app.post('/api/v1/test', function(req, res) {
   console.log(req.body);
   var temp = req.body.temp;
   var humidity = req.body.humidity;
@@ -30,6 +33,22 @@ app.post('/test', function(req, res) {
   else{
     res.json("ERROR");
   }
+});
+
+app.get('/api/v1/preferences/:id', function(req, res) {
+  
+  var id = req.params.id;
+  //TODO: Check versus DB
+  if (id === 'arduino01'){
+    res.json({id: id , value: 20});
+  }else {
+      res.json({error: true});
+  }
+});
+app.post('/api/v1/preferences', function(req, res) {
+  //TODO: Receive
+  var temp = req.body.temp;
+  res.json({result: true, preference:req.body.temp}); 
 });
 
 // view engine setup

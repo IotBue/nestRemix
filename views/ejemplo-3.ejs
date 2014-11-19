@@ -40,61 +40,83 @@
         </section>
       </div>
     </header>
-
-
-        <div class="small g-wide--1 g-medium--half">
-            <div class="g-wide--1 g-wide--last g-medium--half">
-                <h1><div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/device/svg/ic_brightness_low_24px.svg"></span></div></h1>
-                  <h1> <div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/action/svg/ic_invert_colors_24px.svg"></span></div></h1>
-                  <h1><div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/file/svg/ic_cloud_24px.svg"></span></div></h1>
-                  <h1> <span> <div class="switch theme--user-input theme--introduction-to-media "><span class="icon-circle themed--background"></span> </span></h1>
+        <div class="error">
+            <div class="highlight-module highlight-module--left highlight-module--learning">
+                <div class="highlight-module__container icon-star">
+                    <div class="highlight-module__content g-wide--push-1 g-wide--pull-1 g-medium--push-1">
+                        <p class="highlight-module__title">Device Not Found</p>
+                        <p class="highlight-module__text">
+                            '<span class="deviceId"></span>' was not found. Check the name and try later.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="g-wide--2 g-wide--last g-medium--half">
-                <h2> <span class="temperatura"> - </span> C</h2>
-                <h2> <span class="humedad"> - </span> %</h2>
-                <h2> <span class="presion"> - </span> h</h2>
-                <h2> <span class="status">OFF</span></h2>
-            </div>
-   
-        </div> 
-        <div class="g-wide--3 g-wide--last g-medium--half g--last">
-            <table class="table-4">
-                <colgroup>
-                    <col span="1">
+        </div>
+        <div class="dashboard">
+            <div class="small g-wide--1 g-medium--half">
+                <div class="g-wide--1 g-wide--last g-medium--half">
+                    
+                    <h1><div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/device/svg/ic_brightness_low_24px.svg"></span></div></h1>
+                      <h1> <div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/action/svg/ic_invert_colors_24px.svg"></span></div></h1>
+                      <h1><div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/file/svg/ic_cloud_24px.svg"></span></div></h1>
+                      <h1> <span> <div class="switch theme--user-input theme--introduction-to-media "><span class="icon-circle themed--background"></span> </span></h1>
+                      <br/>
+                      <h1> <span> <div class="theme--user-input theme--introduction-to-media ">
+                      <span class="icon-circle themed--background"><img class="icon" src="https://google.github.io/material-design-icons/action/svg/ic_settings_remote_24px.svg"></span> </span></h1>
+                </div>
+                <div class="g-wide--2 g-wide--last g-medium--half">
+                    <h2> <span class="temperatura"> - </span> C</h2>
+                    <h2> <span class="humedad"> - </span> %</h2>
+                    <h2> <span class="presion"> - </span> h</h2>
+                    <h2> <span class="status">OFF</span></h2>
+                    <br/>
+                    <h1> <input class="room" type="number" min="12" max="35"/> </h1>
+                </div>
+                
+            </div> 
+            
+            <div class="g-wide--3 g-wide--last g-medium--half g--last">
+                <table class="table-4">
+                    <colgroup>
                         <col span="1">
                             <col span="1">
                                 <col span="1">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>Time Of The Day</th>
-                        <th>C</th>
-                        <th>Prediction</th>
-                        <th>Suggestion</th>
+                                    <col span="1">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Time Of The Day</th>
+                            <th>C</th>
+                            <th>Prediction</th>
+                            <th>Suggestion</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody class='predictions'>
                         
-                    </tr>
-                </thead>
-                <tbody class='predictions'>
-                    
-                    
-                </tbody>
-            </table>
-            <div class="small">
-                <div>
-                    <svg id="chart"></svg>
+                        
+                    </tbody>
+                </table>
+                <div class="small">
+                    <div>
+                        <svg id="chart"></svg>
+                    </div>
+                    <div class="valor">
+                    </div>
                 </div>
-                <div class="valor">
-                </div>
-            </div>
 
+            </div>
         </div>
-        
     <!-- build:js scripts/main.min.js -->
 
     <!-- endbuild -->
 
     <script src="/js/jquery.min.js"></script>
     <script src="/js/d3.min.js"></script>
+    <script>
+        //TODO: Change for main device from URI
+        var deviceId = 'arduino01';
+    </script>
     <script src="/js/ejemplo-3/app.js"></script>
     
  
