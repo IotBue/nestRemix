@@ -9,5 +9,9 @@ router.get('/', function(req, res) {
 router.get('/ejemplo/2', function(req, res) {
   res.render('ejemplo-2', { title: 'Express' });
 });
+/* GET home page. */
+router.get('/ejemplo/3', function(req, res) {
+  res.render('ejemplo-3', { title: 'Express' });
+});
 
 module.exports = router;
