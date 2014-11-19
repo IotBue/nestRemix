@@ -122,7 +122,28 @@ socket = io.sockets.on('connection', function (socket) {
     showData(temp,humidity,pressure,isDeviceOn);
   
   },2000); 
-
+  setInterval(function(){
+    //TODO: replace with real info
+    
+    var predictions =[];
+    for (var i = 0; i < 3; i++) {
+      var prediction = {
+        //moment of the day  0 - MORNING, 1- AFTERNOON, 2-NIGTH
+        moment: i,
+        //from sensors
+        temperature: Math.floor((Math.random() * 20) + 20),
+        //from weather channel api
+        prediction:Math.floor((Math.random() * 20) + 20),
+        //from conculsion from API
+        conculsion:Math.floor((Math.random() * 20) + 20),
+        //status from the system
+        isDeviceOn: Math.random() > 0.5
+      };
+      predictions.push(prediction);
+    };
+    socket.emit('day-predicition',predictions);
+    
+  },2000); 
   //some web-client disconnects
   socket.on('disconnect', function (socket) {
     console.log("disconnect");

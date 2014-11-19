@@ -86,12 +86,28 @@ img.icon {
 	color: #fff;
 	padding: 10px;
 }
+div.small img.icon{
+	/* background-color: #fff; */
+	color: #fff;
+	-webkit-filter: invert(100%);
+	filter: invert(100%);
+	min-width: 50px;
+	position: absolute;
+	line-height: 0;
+	top: -3px;
+	/* width: 100%; */
+	left: -3px;
+	text-align: center;
+	color: #fff;
+	padding: 9px;
+
+}
 
 div.small #chart{
 	z-index: 1;
 	position: inherit; 
 	margin: auto;
-	width: 50%; 
+	width: 100%; 
 	height: 100%; 
 
 }

@@ -38,7 +38,7 @@
           if (data.value){
             $('.switch').addClass('theme--user-input');
             $('.switch').removeClass('theme--introduction-to-media');
-            
+
             $('.status').html('ON');
 
           }
@@ -47,6 +47,30 @@
             $('.switch').addClass('theme--introduction-to-media');
             $('.status').html('OFF');
           }
+    });
+
+
+        var moments=[];
+        moments.push('9:00');
+        moments.push('14:00');
+        moments.push('20:00');
+    socket.on('day-predicition', function(data){
+
+        
+        var predictionsHtml = '';
+        for (var i = 0; i < data.length; i++) {
+          var current = data[i];
+          //TODO: Replace with a nice template engine
+          var status = current.isDeviceOn ? 'ON' : 'OFF'
+            predictionsHtml +='<tr>';
+            predictionsHtml +='<td data-th="hora"><code>' + moments[current.moment]+ ' </code></td>';
+            predictionsHtml +='<td data-th="availability">'+current.temperature + ' C </td>';
+            predictionsHtml +='<td data-th="description">'+ current.prediction +  ' C </td>';
+            predictionsHtml +='<td data-th="description">' + current.conculsion + ' C -( ' + status +  ')</td>';
+            predictionsHtml +='</tr>';
+        };
+
+        $('.predictions').html(predictionsHtml);
     });
    
   var n = 30,

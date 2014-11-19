@@ -42,32 +42,53 @@
     </header>
 
 
-
-        <div class="g-wide--2 g-wide--last g-medium--half">
+        <div class="small g-wide--1 g-medium--half">
             <div class="g-wide--1 g-wide--last g-medium--half">
-                <h1><div class="theme--multi-device-layouts"><span class="icon-circle--large themed--background"><img class="icon" src="http://google.github.io/material-design-icons/device/svg/ic_brightness_low_24px.svg"></span></div></h1>
-                  <h1> <div class="theme--multi-device-layouts"><span class="icon-circle--large themed--background"><img class="icon" src="http://google.github.io/material-design-icons/action/svg/ic_invert_colors_24px.svg"></span></div></h1>
-                  <h1><div class="theme--multi-device-layouts"><span class="icon-circle--large themed--background"><img class="icon" src="http://google.github.io/material-design-icons/file/svg/ic_cloud_24px.svg"></span></div></h1>
-                  <h1> <span> <div class="switch theme--user-input theme--introduction-to-media "><span class="icon-circle--large themed--background"></span </span></h1>
+                <h1><div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/device/svg/ic_brightness_low_24px.svg"></span></div></h1>
+                  <h1> <div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/action/svg/ic_invert_colors_24px.svg"></span></div></h1>
+                  <h1><div class="theme--multi-device-layouts"><span class="icon-circle themed--background"><img class="icon" src="http://google.github.io/material-design-icons/file/svg/ic_cloud_24px.svg"></span></div></h1>
+                  <h1> <span> <div class="switch theme--user-input theme--introduction-to-media "><span class="icon-circle themed--background"></span> </span></h1>
             </div>
             <div class="g-wide--2 g-wide--last g-medium--half">
-                <h1> <span class="temperatura"> - </span> C</h1>
-                <h1> <span class="humedad"> - </span> %</h1>
-                <h1> <span class="presion"> - </span> hPa</h2>
-                <h1> <span class="status">OFF</span></h2>
+                <h2> <span class="temperatura"> - </span> C</h2>
+                <h2> <span class="humedad"> - </span> %</h2>
+                <h2> <span class="presion"> - </span> h</h2>
+                <h2> <span class="status">OFF</span></h2>
             </div>
    
         </div> 
-        
-        
-        <div class="small">
-        <div>
-            <svg id="chart"></svg>
-        </div>
-            <div class="valor">
+        <div class="g-wide--3 g-wide--last g-medium--half g--last">
+            <table class="table-4">
+                <colgroup>
+                    <col span="1">
+                        <col span="1">
+                            <col span="1">
+                                <col span="1">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Time Of The Day</th>
+                        <th>C</th>
+                        <th>Prediction</th>
+                        <th>Suggestion</th>
+                        
+                    </tr>
+                </thead>
+                <tbody class='predictions'>
+                    
+                    
+                </tbody>
+            </table>
+            <div class="small">
+                <div>
+                    <svg id="chart"></svg>
+                </div>
+                <div class="valor">
+                </div>
             </div>
-        </div>
 
+        </div>
+        
     <!-- build:js scripts/main.min.js -->
 
     <!-- endbuild -->
