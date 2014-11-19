@@ -107,7 +107,7 @@ function showData(temp, humidity, pressure){
 socket = io.sockets.on('connection', function (socket) {
   console.log("connnect"); 
   //Please Remove 
-  /*setInterval(function(){
+  setInterval(function(){
     //TODO: Reeplace for real value
     var temp = Math.floor((Math.random() * 20) + 20);
     var humidity = Math.floor((Math.random() * 100) + 0);
@@ -115,7 +115,7 @@ socket = io.sockets.on('connection', function (socket) {
 
     showData(temp,humidity,pressure);
   
-  },1000); */
+  },2000); 
 
   //some web-client disconnects
   socket.on('disconnect', function (socket) {

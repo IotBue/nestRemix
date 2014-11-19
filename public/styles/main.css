@@ -87,6 +87,15 @@ img.icon {
 	padding: 10px;
 }
 
+div.small #chart{
+	z-index: 1;
+	position: inherit; 
+	margin: auto;
+	width: 50%; 
+	height: 100%; 
+
+}
+
 
 
 
