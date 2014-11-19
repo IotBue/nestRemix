@@ -1,10 +1,11 @@
 =================
 nest-remix
 =================
-![Nest origianl](http://cdn.slashgear.com/wp-content/uploads/2014/03/nest_thermostat_insteon-800x420.jpg)
+![Nest original](http://cdn.slashgear.com/wp-content/uploads/2014/03/nest_thermostat_insteon-800x420.jpg)
 
 Nest Remix is a open source project developed to teach with a little first project about Internet of Things.
 
+![Pizarra](/assets/pizarraTaller.jpg)
 
 ### Version
 0.0.1
