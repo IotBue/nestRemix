@@ -97,7 +97,7 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io')(server);
 
 var socket;
-function showData(temp, humidity, pressure){
+function showData(temp, humidity, pressure, isDeviceOn){
   var tempMsg = {value: temp};
   socket.emit('temp',tempMsg);
 
@@ -108,6 +108,11 @@ function showData(temp, humidity, pressure){
   //TODO: Reeplace for real value
   var pressureMsg = {value: pressure};
   socket.emit('presure',pressureMsg );
+
+  //TODO: Repleace with real data
+  var isDeviceOnMsg = {value: isDeviceOn};
+  socket.emit('systemStatus',isDeviceOnMsg);
+
 }
 
 function saveData(temp, humidity, pressure){
@@ -137,16 +142,38 @@ function saveData(temp, humidity, pressure){
 socket = io.sockets.on('connection', function (socket) {
   console.log("connnect"); 
   //Please Remove 
-  /*setInterval(function(){
+  setInterval(function(){
     //TODO: Reeplace for real value
     var temp = Math.floor((Math.random() * 20) + 20);
     var humidity = Math.floor((Math.random() * 100) + 0);
     var pressure = Math.floor((Math.random() * -300) + 1300);
+    var isDeviceOn = Math.random() > 0.5;
 
-    showData(temp,humidity,pressure);
+    showData(temp,humidity,pressure,isDeviceOn);
   
-  },1000); */
-
+  },2000); 
+  setInterval(function(){
+    //TODO: replace with real info
+    
+    var predictions =[];
+    for (var i = 0; i < 3; i++) {
+      var prediction = {
+        //moment of the day  0 - MORNING, 1- AFTERNOON, 2-NIGTH
+        moment: i,
+        //from sensors
+        temperature: Math.floor((Math.random() * 20) + 20),
+        //from weather channel api
+        prediction:Math.floor((Math.random() * 20) + 20),
+        //from conculsion from API
+        conculsion:Math.floor((Math.random() * 20) + 20),
+        //status from the system
+        isDeviceOn: Math.random() > 0.5
+      };
+      predictions.push(prediction);
+    };
+    socket.emit('day-predicition',predictions);
+    
+  },2000); 
   //some web-client disconnects
   socket.on('disconnect', function (socket) {
     console.log("disconnect");
