@@ -90,7 +90,7 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io')(server);
 
 var socket;
-function showData(temp, humidity, pressure){
+function showData(temp, humidity, pressure, isDeviceOn){
   var tempMsg = {value: temp};
   socket.emit('temp',tempMsg);
 
@@ -101,6 +101,11 @@ function showData(temp, humidity, pressure){
   //TODO: Reeplace for real value
   var pressureMsg = {value: pressure};
   socket.emit('presure',pressureMsg );
+
+  //TODO: Repleace with real data
+  var isDeviceOnMsg = {value: isDeviceOn};
+  socket.emit('systemStatus',isDeviceOnMsg);
+
 }
 
 //some web-client connects
@@ -112,8 +117,9 @@ socket = io.sockets.on('connection', function (socket) {
     var temp = Math.floor((Math.random() * 20) + 20);
     var humidity = Math.floor((Math.random() * 100) + 0);
     var pressure = Math.floor((Math.random() * -300) + 1300);
+    var isDeviceOn = Math.random() > 0.5;
 
-    showData(temp,humidity,pressure);
+    showData(temp,humidity,pressure,isDeviceOn);
   
   },2000); 
 
