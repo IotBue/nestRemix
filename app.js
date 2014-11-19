@@ -8,6 +8,8 @@ var http = require('http');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var bodyParser = require('body-parser');
+var geoip = require('geoip-lite');
+
   
 var app = express();
 
@@ -15,7 +17,7 @@ app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
-
+app.enable('trust proxy');
 // assuming POST: temp=foo        <-- URL encoding
 // or       POST: {"temp":"foo"}  <-- JSON encoding
 app.post('/test', function(req, res) {
@@ -25,11 +27,16 @@ app.post('/test', function(req, res) {
   var pressure = req.body.pressure;
   if(temp && humidity && pressure){
     showData(temp, humidity, pressure);
+    saveData(temp, humidity, pressure);
     res.json("OK");
   }
   else{
     res.json("ERROR");
   }
+
+  console.log(req.ip);
+  var geo = geoip.lookup(req.ip);
+  console.log(geo);
 });
 
 // view engine setup
@@ -101,6 +108,29 @@ function showData(temp, humidity, pressure){
   //TODO: Reeplace for real value
   var pressureMsg = {value: pressure};
   socket.emit('presure',pressureMsg );
+}
+
+function saveData(temp, humidity, pressure){
+  http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
+    console.log('STATUS: ' + res.statusCode);
+    console.log('HEADERS: ' + JSON.stringify(res.headers));
+    // Buffer the body entirely for processing as a whole.
+    var bodyChunks = [];
+    res.on('data', function(chunk) {
+      // You can process streamed parts here...
+      bodyChunks.push(chunk);
+    }).on('end', function() {
+      var bodyRaw = Buffer.concat(bodyChunks);
+      console.log('BODY: ' + bodyRaw);
+      var body = JSON.parse(bodyRaw);
+      console.log('TEMP: ' + body.main.temp);
+      console.log('HUM: ' + body.main.humidity);
+      console.log('PRES: ' + body.main.pressure);
+      // ...and/or process the entire body here.
+    })
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
 }
 
 //some web-client connects
