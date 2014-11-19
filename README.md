@@ -30,7 +30,13 @@ Nest Remix uses a number of open source projects and frameworks:
 Reference
 =========
 
+* [Smart Citizen Kit] 
+Smart Citizen kit es un proyecto surgido del Fab Lab Barcelona por Tomás Diez, acelerado a través de crowdfunding en [Kickstarter]. El SCK es un dispositivo compuesto por una placa basada en Arduino y un shield con sensores de luz, sonido, temperatura, humedad, Dióxido de nitrógeno y Monóxido de carbono. Además tiene conectividad wifi y slot para colocar una batería de litio para ser totalmente autónomo.
+En el sitio de Smart Citizen Kit se pueden visualizar en un mapa en tiempo real todos los sensores activos y los valores.
 
+* [Nest Thermostat]
+Producto comprado por Google en $3.2 millones de dólares, es un dispositivo que controla la temperatura del hogar y reemplaza el típico termostato, que es un producto utilizado en la mayoría de los hogares en Estados Unidos.
+La particularidad de este termostato es que puede controlarse de forma remota por web o una aplicación mobile, y además va "aprendiendo" cómo se modifica la temperatura, y luego de un par de días de uso se regula de forma automática para optimizar el consumo de energía y ajustarse a las preferencias de cada hogar.
 
 Authors
 =======
@@ -65,3 +71,5 @@ Free to use and specially free to teach!
 [MongoDB]: http://mongodb.org
 [Heroku]: http://heroku.com
 [Weather API]: http://www.wunderground.com/
+[Nest Thermostat]: http://nest.com
+[Smart Citizen Kit]: https://www.smartcitizen.me/
