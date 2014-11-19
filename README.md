@@ -5,7 +5,7 @@ nest-remix
 
 Nest Remix is a open source project developed to teach with a little first project about Internet of Things.
 
-![Pizarra](/assets/pizarraTaller.jpg)
+
 
 ### Version
 0.0.1
@@ -17,8 +17,10 @@ Nest Remix uses a number of open source projects and frameworks:
 * [Node.js]
 * [Express]
 * [Bower]
+* [MongoDB]
 * [Arduino]
-
+* [Heroku]
+* [Weather API]
 
 ### To Do
 - Update Documentation
@@ -31,7 +33,7 @@ Reference
 
 
 Authors
-============
+=======
 * [Javier Velazquez Traut] y [Sebi] de [CRAN.IO]
 * [Patagonia Tec]
 * [Martín Rabaglia]
@@ -41,11 +43,11 @@ Authors
 
 
 License
--------
+=======
 
-Free to use
+Free to use and specially free to teach!
 
-**Enjoy, learn and teach!**
+**Enjoy, learn and collaborate!**
 
 
 [AngularJS]: http://angularjs.org
@@ -56,3 +58,10 @@ Free to use
 [Martín Rabaglia]: http://twitter.com/sr_humo
 [Cristian Reynaga]: http://cristianreynaga.com
 [IoTBue]: http://www.meetup.com/IoT-Buenos-Aires/
+[Node.js]: http://nodejs.org
+[Express]: http://expressjs.com
+[Bower]: http://bower.io
+[Arduino]: http://arduino.cc
+[MongoDB]: http://mongodb.org
+[Heroku]: http://heroku.com
+[Weather API]: http://www.wunderground.com/
