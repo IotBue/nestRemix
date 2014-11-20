@@ -71,23 +71,43 @@ app.post('/api/v1/stats', function(req, res) {
 
 
 
+var devices =[];
+
 //Get device preferences
 app.get('/api/v1/preferences/:id', function(req, res) {
   
   var id = req.params.id;
-  //TODO: Check versus DB
-  if (id === 'arduino01'){
-    res.json({id: id , value: 20});
-  }else {
+  var found = false;
+  for (var i = 0; i < devices.length; i++) {
+    console.log(devices[i]);
+    if (devices[i].deviceId === id){
+      console.log(devices[i].preferences);
+      res.json(
+        {deviceId: id , 
+        value: devices[i].preferences});
+      
+    }
+  };
+  if (!found){
       res.json({error: true});
+      // res.end();
   }
 });
 
 //Save preferences
 app.post('/api/v1/preferences', function(req, res) {
-  //TODO: Receive
-  var temp = req.body.temp;
-  res.json({result: true, preference:req.body.temp}); 
+  
+  var value = req.body.value;
+  var id = req.body.id;
+  for (var i = 0; i < devices.length; i++) {
+    if (devices[i].deviceId === id){
+      devices[i].preferences = value;
+      res.json({result:true});
+      // res.end();
+    }
+  };
+  
+  // res.end();
 });
 
 
@@ -157,7 +177,22 @@ function broadcastData(m,p){
   
 }
 
-function saveData(temp, humidity, pressure){
+function saveData(m){
+
+  //Add device to connected devices
+  var found = false;
+  for (var i = 0; i < devices.length; i++) {
+    if (devices[i].id === m.deviceId){
+      found = true;
+    }
+  };
+  if (!found){
+    devices.push({
+      deviceId: m.deviceId,
+      preferences: 20,
+    });
+    console.log('new device ' + m.deviceId);
+  }
 
   //First I go to get more information.
   http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
