@@ -43,7 +43,6 @@ app.use('/', routes);
 // or       POST: {"temp":"foo"}  <-- JSON encoding
 app.post('/api/v1/stats', function(req, res) {
   console.log(req.body);
-  
 
   var m = {
      temp: req.body.temp, 
@@ -207,7 +206,7 @@ function saveData(temp, humidity, pressure){
     
     var predictions =[];
     var deviceId = 'arduino01';
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 1; i++) {
       var prediction = {
         //moment of the day  0 - MORNING, 1- AFTERNOON, 2-NIGTH
         moment: i,
@@ -216,7 +215,9 @@ function saveData(temp, humidity, pressure){
         //from weather channel api
         prediction:Math.floor((Math.random() * 20) + 20),
         //from conculsion from API
-        conculsion:Math.floor((Math.random() * 20) + 20),
+        temperatureDifference:Math.floor((Math.random() * 2) + 6),
+        //how much it will take to change it
+        timeToGetThere:Math.floor((Math.random() * 2) + 6),
         //status from the system
         isDeviceOn: Math.random() > 0.5,
       };

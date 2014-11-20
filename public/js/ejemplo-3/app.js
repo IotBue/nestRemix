@@ -98,7 +98,7 @@
             predictionsHtml +='<td data-th="hora"><code>' + moments[current.moment]+ ' </code></td>';
             predictionsHtml +='<td data-th="availability">'+current.temperature + ' C </td>';
             predictionsHtml +='<td data-th="description">'+ current.prediction +  ' C </td>';
-            predictionsHtml +='<td data-th="description">' + current.conculsion + ' C -( ' + status +  ')</td>';
+            predictionsHtml +='<td data-th="description">+' + current.temperatureDifference + ' C in '+ current.timeToGetThere + 'hs -( ' + status +  ')</td>';
             predictionsHtml +='</tr>';
         };
 
