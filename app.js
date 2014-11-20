@@ -194,27 +194,27 @@ function saveData(m){
     console.log('new device ' + m.deviceId);
   }
 
-  //First I go to get more information.
-  http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
-    console.log('STATUS: ' + res.statusCode);
-    console.log('HEADERS: ' + JSON.stringify(res.headers));
-    // Buffer the body entirely for processing as a whole.
-    var bodyChunks = [];
-    res.on('data', function(chunk) {
-      // You can process streamed parts here...
-      bodyChunks.push(chunk);
-    }).on('end', function() {
-      var bodyRaw = Buffer.concat(bodyChunks);
-      console.log('BODY: ' + bodyRaw);
-      var body = JSON.parse(bodyRaw);
-      console.log('TEMP: ' + body.main.temp);
-      console.log('HUM: ' + body.main.humidity);
-      console.log('PRES: ' + body.main.pressure);
-      // ...and/or process the entire body here.
-    })
-  }).on('error', function(e) {
-    console.log("Got error: " + e.message);
-  });
+  // //First I go to get more information.
+  // http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
+  //   console.log('STATUS: ' + res.statusCode);
+  //   console.log('HEADERS: ' + JSON.stringify(res.headers));
+  //   // Buffer the body entirely for processing as a whole.
+  //   var bodyChunks = [];
+  //   res.on('data', function(chunk) {
+  //     // You can process streamed parts here...
+  //     bodyChunks.push(chunk);
+  //   }).on('end', function() {
+  //     var bodyRaw = Buffer.concat(bodyChunks);
+  //     console.log('BODY: ' + bodyRaw);
+  //     var body = JSON.parse(bodyRaw);
+  //     console.log('TEMP: ' + body.main.temp);
+  //     console.log('HUM: ' + body.main.humidity);
+  //     console.log('PRES: ' + body.main.pressure);
+  //     // ...and/or process the entire body here.
+  //   })
+  // }).on('error', function(e) {
+  //   console.log("Got error: " + e.message);
+  // });
 }
 
 
