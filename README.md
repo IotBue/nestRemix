@@ -6,6 +6,17 @@ Nest Remix
 Nest Remix is a open source project developed to teach with a little first project about Internet of Things.
 Este proyecto se realizó como eje de los contenidos para el primer taller del Meetup de Internet of Things en Buenos Aires. 
 
+Equipo:
+el objetivo de este prototipo es tener:
+* a) conectar arduino con los sensores y visualizarlos en el Serial Console con Serial.println()
+* b) conectar arduino con node y visualizar los datos crudos en un html local
+* c) conectar arduino con node y visualizar los datos en Heroku
+* d) conectar arduino con node y visualizar los datos en Heroku con D3.js y guardando en MongoDB
+* e) conectar arduino con node, levantar data geolocalizada de Weather Channel API y visualizar la comparación
+* f) conectar arduino con node, API, e ir seteando nuestra preferencia de temp
+* g) conectar arduino con node, API, setear nuestra preferencia de temp y actuar sobre arduino con Relé
+
+
 Este remix que proponemos recorre diferentes estadios de sensado y conectividad para llegar desde una unidad simple de medición de temperatura hasta un sistema inteligente de medición y control de hardware conectado a una base de datos que guarda las preferencias y contrapone contra la API de Weather Channel para establecer coeficientes de temperatura y disminuir las diferencias.
 
 Pasaremos del funcionamiento de una placa Arduino y recibir en nuestra computadora el valor de temperatura del sensor DHT11, agregando luego la conexión a una página web local que muestre estos valores, avanzaremos en la implementación de una gráfica en D3.js para visualizar en tiempo real, y luego finalizaremos nuestra implementación en un servicio on line (Heroku) para tener control de nuestro dispositivo conectado por cable de red a internet.
