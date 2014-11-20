@@ -43,6 +43,7 @@
     $.get("/api/v1/preferences/" + deviceId , function( data ) {
       if (data.error){
         $('.dashboard').hide();
+        $('.deviceId').html(deviceId);
         $('.error').show();
       }
       else {

@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
 var routes = require('./routes/index');
-var users = require('./routes/users');
+
 var bodyParser = require('body-parser');
 var geoip = require('geoip-lite');
 
@@ -22,6 +22,23 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 //TODO: MOVE TO ROUTER.
 app.enable('trust proxy');
 
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.set('port', process.env.PORT || 3000);
+app.use(favicon());
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+//add this so the browser can GET the bower files
+app.use('/js/bower_components', express.static(__dirname + '/js/bower_components'));
+
+app.use('/', routes);
 // assuming POST: temp=foo        <-- URL encoding
 // or       POST: {"temp":"foo"}  <-- JSON encoding
 app.post('/api/v1/test', function(req, res) {
@@ -43,6 +60,7 @@ app.post('/api/v1/test', function(req, res) {
   console.log(geo);
 });
 
+
 app.get('/api/v1/preferences/:id', function(req, res) {
   
   var id = req.params.id;
@@ -59,22 +77,7 @@ app.post('/api/v1/preferences', function(req, res) {
   res.json({result: true, preference:req.body.temp}); 
 });
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.set('port', process.env.PORT || 3000);
-app.use(favicon());
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-//add this so the browser can GET the bower files
-app.use('/js/bower_components', express.static(__dirname + '/js/bower_components'));
-
-app.use('/', routes);
-app.use('/users', users);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
