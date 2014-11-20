@@ -69,6 +69,25 @@ app.post('/api/v1/stats', function(req, res) {
   console.log(geo);
 });
 
+app.get('/api/v1/stats/:id', function(req, res) {
+  var id = req.params.id;
+  for (var i = 0; i < devices.length; i++) {
+      console.log(devices[i]);
+      if (devices[i].deviceId === id){
+        console.log(devices[i].preferences);
+        res.json(
+          {
+            deviceId: id , 
+            stats: devices[i].stats
+          });
+      }
+    };
+     res.json(
+          {
+            error:'Not Found',
+          });
+
+});
 
 
 var devices =[];
@@ -181,18 +200,35 @@ function saveData(m){
 
   //Add device to connected devices
   var found = false;
+  //Find device
+  var device; 
   for (var i = 0; i < devices.length; i++) {
-    if (devices[i].id === m.deviceId){
+    if (devices[i].deviceId === m.deviceId){
       found = true;
+      device = devices[i];
     }
   };
+  console.log(found);
+  //If it doesn't exists
   if (!found){
-    devices.push({
+    var d = {
       deviceId: m.deviceId,
       preferences: 20,
-    });
+      stats: []
+    }
+    devices.push(d);
+    device = d;
     console.log('new device ' + m.deviceId);
   }
+
+  //add new stat
+ var stat = {
+    temp: m.temp, 
+    humidity: m.humidity, 
+    pressure:  m.pressure,
+    time: new Date()
+  }
+  device.stats.push(stat);
 
   // //First I go to get more information.
   // http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
