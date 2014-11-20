@@ -48,6 +48,7 @@
       }
       else {
         $roomPreference.val(data.value);
+        socket.emit('room', deviceId);
       }      
     });
 

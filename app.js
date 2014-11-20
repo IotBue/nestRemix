@@ -41,14 +41,23 @@ app.use('/js/bower_components', express.static(__dirname + '/js/bower_components
 app.use('/', routes);
 // assuming POST: temp=foo        <-- URL encoding
 // or       POST: {"temp":"foo"}  <-- JSON encoding
-app.post('/api/v1/test', function(req, res) {
+app.post('/api/v1/stats', function(req, res) {
   console.log(req.body);
-  var temp = req.body.temp;
-  var humidity = req.body.humidity;
-  var pressure = req.body.pressure;
-  if(temp && humidity && pressure){
-    showData(temp, humidity, pressure);
-    saveData(temp, humidity, pressure);
+  
+
+  var m = {
+     temp: req.body.temp, 
+     humidity: req.body.humidity, 
+     pressure:  req.body.pressure,
+     deviceId:  req.body.deviceId,
+  };
+  
+
+
+  if(m.temp && m.humidity && m.pressure && m.deviceId){
+
+    saveData(m);
+    broadcastData(m);
     res.json("OK");
   }
   else{
@@ -61,6 +70,8 @@ app.post('/api/v1/test', function(req, res) {
 });
 
 
+
+//Get device preferences
 app.get('/api/v1/preferences/:id', function(req, res) {
   
   var id = req.params.id;
@@ -71,6 +82,8 @@ app.get('/api/v1/preferences/:id', function(req, res) {
       res.json({error: true});
   }
 });
+
+//Save preferences
 app.post('/api/v1/preferences', function(req, res) {
   //TODO: Receive
   var temp = req.body.temp;
@@ -120,25 +133,33 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io')(server);
 
 var socket;
-function showData(temp, humidity, pressure, isDeviceOn){
-  var tempMsg = {value: temp};
-  socket.emit('temp',tempMsg);
+function broadcastData(m,p){
+  
 
-  //TODO: Reeplace for real value
-  var humidityMsg = {value: humidity};
-  socket.emit('humity', humidityMsg);
+  for (var i = 0; i < sockets.length; i++) {
+    if (sockets[i].room === m.deviceId){
+        var socket = sockets[i];
+        var tempMsg = {value: m.temp};
+        socket.emit('temp',tempMsg);
+        //TODO: Reeplace for real value
+        var humidityMsg = {value: m.humidity};
+        socket.emit('humity', humidityMsg);
+        //TODO: Reeplace for real value
+        var pressureMsg = {value: m.pressure};
+        socket.emit('presure',pressureMsg );
 
-  //TODO: Reeplace for real value
-  var pressureMsg = {value: pressure};
-  socket.emit('presure',pressureMsg );
-
-  //TODO: Repleace with real data
-  var isDeviceOnMsg = {value: isDeviceOn};
-  socket.emit('systemStatus',isDeviceOnMsg);
-
+        //TODO: Repleace with real data
+        var isDeviceOnMsg = {value: m.isDeviceOn};
+        socket.emit('systemStatus',isDeviceOnMsg);
+        break;
+    }
+  };
+  
 }
 
 function saveData(temp, humidity, pressure){
+
+  //First I go to get more information.
   http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
     console.log('STATUS: ' + res.statusCode);
     console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -161,10 +182,8 @@ function saveData(temp, humidity, pressure){
   });
 }
 
-//some web-client connects
-socket = io.sockets.on('connection', function (socket) {
-  console.log("connnect"); 
-  //Please Remove 
+
+ //Please Remove 
   setInterval(function(){
     //TODO: Reeplace for real value
     var temp = Math.floor((Math.random() * 20) + 20);
@@ -172,13 +191,21 @@ socket = io.sockets.on('connection', function (socket) {
     var pressure = Math.floor((Math.random() * -300) + 1300);
     var isDeviceOn = Math.random() > 0.5;
 
-    //showData(temp,humidity,pressure,isDeviceOn);
+    var m = {
+      temp: temp,
+      humidity: humidity,
+      pressure: pressure,
+      isDeviceOn: isDeviceOn, 
+      deviceId: 'arduino01'
+    }
+    broadcastData(m);
   
   },2000); 
   setInterval(function(){
     //TODO: replace with real info
     
     var predictions =[];
+    var deviceId = 'arduino01';
     for (var i = 0; i < 3; i++) {
       var prediction = {
         //moment of the day  0 - MORNING, 1- AFTERNOON, 2-NIGTH
@@ -190,13 +217,28 @@ socket = io.sockets.on('connection', function (socket) {
         //from conculsion from API
         conculsion:Math.floor((Math.random() * 20) + 20),
         //status from the system
-        isDeviceOn: Math.random() > 0.5
+        isDeviceOn: Math.random() > 0.5,
       };
       predictions.push(prediction);
     };
-    socket.emit('day-predicition',predictions);
+    for (var i = 0; i < sockets.length; i++) {
+      if (sockets[i].room === deviceId){
+        sockets[i].emit('day-predicition',predictions);
+        break;
+      }
+    }
     
   },2000); 
+  
+//some web-client connects
+
+
+var sockets = []
+io.sockets.on('connection', function (socket) {
+  console.log("connnect"); 
+
+  sockets.push(socket);
+
   //some web-client disconnects
   socket.on('disconnect', function (socket) {
     console.log("disconnect");
@@ -206,6 +248,17 @@ socket = io.sockets.on('connection', function (socket) {
   socket.on('client', function (data) {
     console.log(data);
   });
+
+  //we expect to get a ping from 
+  //them saying what room they want to join
+  socket.on('room', function(data) {
+      if(socket.room){
+          socket.leave(socket.room);
+      }
+      socket.room = data;
+      console.log('new connection to: ' + data);
+      socket.join(data);
+    });
 });
 
 
