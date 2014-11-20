@@ -112,9 +112,12 @@ div.small #chart{
 
 }
 
-
-
-
+div.small input{
+	max-width: 100%;
+}
+div.error{
+	display: none;
+}
 
 
 
