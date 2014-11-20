@@ -57,7 +57,7 @@ app.post('/api/v1/stats', function(req, res) {
   if(m.temp && m.humidity && m.pressure && m.deviceId){
 
     saveData(m);
-    // broadcastData(m);
+    broadcastData(m);
     //sendPrediction(m);
     res.json("OK");
   }
@@ -72,7 +72,7 @@ app.post('/api/v1/stats', function(req, res) {
 
 app.get('/api/v1/stats/:id', function(req, res) {
   var id = req.params.id;
-  models.preferences.findOne( {'deviceId' : id }, function(e, p){
+  models.measures.find( {'deviceId' : id }, function(e, p){
     if (p){
       res.json(p);
     }
@@ -189,7 +189,9 @@ function broadcastData(m,p){
 
 function saveData(m){
   console.log('save');
+  //Find device or create
   models.preferences.findOne( {'deviceId' : m.deviceId }, function(e, p){
+
     if (p){
       console.log('found', p );
     }
@@ -203,38 +205,9 @@ function saveData(m){
       newP.save();
     }
   });
-
- //  //Add device to connected devices
- //  var found = false;
- //  //Find device
- //  var device; 
- //  for (var i = 0; i < devices.length; i++) {
- //    if (devices[i].deviceId === m.deviceId){
- //      found = true;
- //      device = devices[i];
- //    }
- //  };
- //  console.log(found);
- //  //If it doesn't exists
- //  if (!found){
- //    var d = {
- //      deviceId: m.deviceId,
- //      preferences: 20,
- //      stats: []
- //    }
- //    devices.push(d);
- //    device = d;
- //    console.log('new device ' + m.deviceId);
- //  }
-
- //  //add new stat
- // var stat = {
- //    temp: m.temp, 
- //    humidity: m.humidity, 
- //    pressure:  m.pressure,
- //    time: new Date()
- //  }
- //  device.stats.push(stat);
+  //Save new stats
+  var newStat = new models.measures(m);
+  newStat.save();
 
   // //First I go to get more information.
   // http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
