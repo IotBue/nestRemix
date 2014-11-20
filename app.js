@@ -1,14 +1,15 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var http = require('http');
-var routes = require('./routes/index');
-
-var bodyParser = require('body-parser');
-var geoip = require('geoip-lite');
+var express       = require('express'),
+    path          = require('path'),
+    favicon       = require('static-favicon'),
+    logger        = require('morgan'),
+    cookieParser  = require('cookie-parser'),
+    bodyParser    = require('body-parser'),
+    http          = require('http'),
+    routes        = require('./routes/index'),
+    mongo         = require('./models/mongo-core'),
+    models       = require('./models/models'),
+    bodyParser    = require('body-parser'),
+    geoip         = require('geoip-lite');
 
   
 var app = express();
@@ -96,21 +97,14 @@ var devices =[];
 app.get('/api/v1/preferences/:id', function(req, res) {
   
   var id = req.params.id;
-  var found = false;
-  for (var i = 0; i < devices.length; i++) {
-    console.log(devices[i]);
-    if (devices[i].deviceId === id){
-      console.log(devices[i].preferences);
-      res.json(
-        {deviceId: id , 
-        value: devices[i].preferences});
+  models.preferences.findOne( {'deviceId' : id }, function(e, d){
+    console.log(restaurant.menuCategory);  
+    if (d){
       
     }
-  };
-  if (!found){
-      res.json({error: true});
-      // res.end();
-  }
+  });
+  
+ 
 });
 
 //Save preferences
