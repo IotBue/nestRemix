@@ -58,6 +58,7 @@ app.post('/api/v1/stats', function(req, res) {
 
     saveData(m);
     broadcastData(m);
+    //sendPrediction(m);
     res.json("OK");
   }
   else{
@@ -140,17 +141,17 @@ function broadcastData(m,p){
     if (sockets[i].room === m.deviceId){
         var socket = sockets[i];
         var tempMsg = {value: m.temp};
-        socket.emit('temp',tempMsg);
+        io.sockets.in(sockets[i].room).emit('temp',tempMsg);
         //TODO: Reeplace for real value
         var humidityMsg = {value: m.humidity};
-        socket.emit('humity', humidityMsg);
+        io.sockets.in(sockets[i].room).emit('humity', humidityMsg);
         //TODO: Reeplace for real value
         var pressureMsg = {value: m.pressure};
-        socket.emit('presure',pressureMsg );
+        io.sockets.in(sockets[i].room).emit('presure',pressureMsg );
 
         //TODO: Repleace with real data
         var isDeviceOnMsg = {value: m.isDeviceOn};
-        socket.emit('systemStatus',isDeviceOnMsg);
+        io.sockets.in(sockets[i].room).emit('systemStatus',isDeviceOnMsg);
         break;
     }
   };
@@ -223,7 +224,7 @@ function saveData(temp, humidity, pressure){
     };
     for (var i = 0; i < sockets.length; i++) {
       if (sockets[i].room === deviceId){
-        sockets[i].emit('day-predicition',predictions);
+        io.sockets.in(sockets[i].room).emit('day-predicition',predictions);
         break;
       }
     }
