@@ -1,7 +1,6 @@
 =================
 Nest Remix
 =================
-![Nest original](http://cdn.slashgear.com/wp-content/uploads/2014/03/nest_thermostat_insteon-800x420.jpg)
 
 Nest Remix is a open source project developed to teach with a little first project about Internet of Things.
 Este proyecto se realizó como eje de los contenidos para el primer taller del Meetup de Internet of Things en Buenos Aires. 
