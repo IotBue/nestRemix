@@ -9,7 +9,7 @@
   
   var temperatures = [];
 
- 
+    
 
     var serverName = window.location.protocol + "//" + window.location.host;
     var socket;
@@ -20,6 +20,8 @@
       socket = io(serverName);
     }
     
+
+    //Sync Status 
     socket.on('temp', function(data){
             $('.temperatura').html(data.value);
             temperatures.push(data.value);
@@ -27,12 +29,42 @@
             loadData();
 
     });
+
     socket.on('humity', function(data){
             $('.humedad').html(data.value);
     });
+
     socket.on('presure', function(data){
             $('.presion').html(data.value);
     });
+    
+    //Load Preferences
+    var $roomPreference = $('.room');
+    $.get("/api/v1/preferences/" + deviceId , function( data ) {
+      if (data.error){
+        $('.dashboard').hide();
+        $('.deviceId').html(deviceId);
+        $('.error').show();
+      }
+      else {
+        $roomPreference.val(data.value);
+        socket.emit('room', deviceId);
+      }      
+    });
+
+    //Save preferences
+    $roomPreference.on('change', function(){
+      console.log($roomPreference.val());
+      var preferences = {
+        value: $roomPreference.val(),
+        id : deviceId
+      };
+      $.post("/api/v1/preferences/", preferences, function( data ) {
+        console.log(data);
+      });
+    })
+
+    //Update system status
     socket.on('systemStatus', function(data){
           //if device is on
           if (data.value){
@@ -66,7 +98,7 @@
             predictionsHtml +='<td data-th="hora"><code>' + moments[current.moment]+ ' </code></td>';
             predictionsHtml +='<td data-th="availability">'+current.temperature + ' C </td>';
             predictionsHtml +='<td data-th="description">'+ current.prediction +  ' C </td>';
-            predictionsHtml +='<td data-th="description">' + current.conculsion + ' C -( ' + status +  ')</td>';
+            predictionsHtml +='<td data-th="description">+' + current.temperatureDifference + ' C in '+ current.timeToGetThere + 'hs -( ' + status +  ')</td>';
             predictionsHtml +='</tr>';
         };
 
