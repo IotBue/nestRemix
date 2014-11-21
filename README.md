@@ -79,7 +79,7 @@ Instalación
 
 Authors
 =======
-* [Javier Velazquez Traut] y [Sebi] de [CRAN.IO]
+* [Javier Velazquez Traut] y [Sebastián Freijo] de [CRAN.IO]
 * [Patagonia Tec]
 * [Martín Rabaglia]
 * [Cristian Reynaga] de [IoTBue]
