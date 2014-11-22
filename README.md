@@ -33,8 +33,7 @@ Requerimientos
 * Noteboook
 * Placa Arduino y cable usb
 * Shield Arduino Ethernet R2 o R3
-* Sensor de temperatura y humedad DHT11 o DHT22 (En este taller utilizaremos DHT11)
-* Sensor de presión barométrica BMP180
+* Sensor de temperatura y humedad DHT11
 * Cables de conexión pines macho
 
 ### Software
@@ -52,8 +51,8 @@ Nuestro proyecto utiliza diferentes proyectos y frameworks de código abierto
 
 Referencias
 =========
-Productos
----------
+### Productos
+
 
 * [Smart Citizen Kit] 
 
@@ -70,25 +69,28 @@ La particularidad de este termostato es que puede controlarse de forma remota po
 EVRYTHNG provides a range of managed applications to help make products smart. This opens up consumer engagement opportunities and makes operations smarter at different stages in the lifecycle of how products are made, sold and used.
 
 
-Blogs
------
+### Blogs
 
 * [Postscapes]
 
 * [Net of everything]
 
 
-Bibliografía
-------------
+### Bibliografía
 
-[The epic struggle of the Internet of Things]: http://www.amazon.com/The-Epic-Struggle-Internet-Things-ebook/dp/B00N8AIFYC
-[The Internet of Things. How the Next Evolution of the Internet Is Changing Everything]:http://www.cisco.com/web/about/ac79/docs/innov/IoT_IBSG_0411FINAL.pdf
+* [The epic struggle of the Internet of Things, Bruce Sterling]
+
+* [The Internet of Things. How the Next Evolution of the Internet Is Changing Everything]
+
+* [IoT Report, Goldman Sachs]
 
 
 Instalación
 ===========
 
-* Agregar paso a paso y comandos
+'''sh
+npm install
+'''
 
 
 
@@ -132,3 +134,6 @@ Free to use and specially free to teach!
 [Evrythng]: https://evrythng.com/
 [Postscapes]: http://postscapes.com/
 [Net of everything]: http://netofeverything.blogspot.com.ar/
+[The epic struggle of the Internet of Things]: http://www.amazon.com/The-Epic-Struggle-Internet-Things-ebook/dp/B00N8AIFYC
+[The Internet of Things. How the Next Evolution of the Internet Is Changing Everything]:http://www.cisco.com/web/about/ac79/docs/innov/IoT_IBSG_0411FINAL.pdf
+[Iot Report Goldman Sachs]: http://www.goldmansachs.com/our-thinking/outlook/internet-of-things/iot-report.pdf
