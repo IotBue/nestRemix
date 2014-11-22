@@ -128,7 +128,7 @@ Free to use and specially free to teach!
 [Evrythng]: https://evrythng.com/
 [Postscapes]: http://postscapes.com/
 [Net of everything]: http://netofeverything.blogspot.com.ar/
-[The epic struggle of the Internet of Things]: http://www.amazon.com/The-Epic-Struggle-Internet-Things-ebook/dp/B00N8AIFYC
+[The epic struggle of the Internet of Things, Bruce Sterling]: http://www.amazon.com/The-Epic-Struggle-Internet-Things-ebook/dp/B00N8AIFYC
 [The Internet of Things. How the Next Evolution of the Internet Is Changing Everything]:http://www.cisco.com/web/about/ac79/docs/innov/IoT_IBSG_0411FINAL.pdf
 [IoT Report, Goldman Sachs]: http://www.goldmansachs.com/our-thinking/outlook/internet-of-things/iot-report.pdf
 [Career Watch: Internet of Things]: http://www.pmi.org/~/media/PDF/Professional-Development/Career-Watch-Internet-of-Things.ashx
