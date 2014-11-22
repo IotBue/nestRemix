@@ -18,7 +18,7 @@ float time=0.0f;
 #define TIMER_DELAY 5.0f
 float timer=TIMER_DELAY;
 
-IPAddress ip(192,168,1,254);
+IPAddress ip(192,168,0,177);
 
 EthernetClient client;
 
@@ -26,8 +26,6 @@ char Status;
 double T1,P; //BMP180
 double T2,H; //DHT11
 String DeviceID = "arduino20";
-String DeviceGEO = "Buenos Aires,AR";
-char response[500];
 
 void setup() {
   Serial.begin(115200);
@@ -64,12 +62,12 @@ void loop()
   // if there are incoming bytes available 
   // from the server, read them and print them:
   if(client.available()){
-    int i=0;
+    String response="";
     while(client.available()){
-      response[i++]=client.read();
+      response+=(char)client.read();
     }
     //Serial.println(response);
-    parsearMensaje(response,i);
+    parsearMensaje(response.c_str(),response.length());
     timer=TIMER_DELAY;
   }
   
@@ -98,9 +96,10 @@ void loop()
     Serial.println();
     Serial.println("disconnecting.");
     client.stop();
-
+    
     // do nothing forevermore:
     delay(10000);
+    setup();
   }
 }
 
@@ -121,8 +120,11 @@ void leerSensores() {
 
 void postearMensaje(const char * body, unsigned int len) {
   // Make a HTTP request:                     
-  client.println("POST " + path + " HTTP/1.1");
-  client.println("Host: " + server);
+  client.print("POST ");
+  client.print(path);
+  client.println(" HTTP/1.1");
+  client.print("Host: ");
+  client.println(server);
   client.println("Connection: keep-alive");
   client.println("Content-Type: application/json");
   client.print("Content-Length: ");

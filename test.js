@@ -15,8 +15,8 @@ var headers = {
 };
 
 var options = {
-  hostname: 'localhost',
-  port: 5000,
+  hostname: 'nest-remix.herokuapp.com',
+  port: 80,
   path: '/api/v1/stats',
   method: 'POST',
   headers: headers
