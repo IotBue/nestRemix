@@ -131,7 +131,7 @@ Authors
 =======
 * [Javier Velazquez Traut] y [Sebastián Freijo] de [CRAN.IO]
 * [Iván Fardjoume] y [Martín Lobato] de [Patagonia Tec]
-* [Martín Rabaglia] de [R/GA Buenos Aires]
+* [Martín Rabaglia] de [R/GA]
 * [Cristian Reynaga] de [IoTBue]
 * [IoTBue]
 
