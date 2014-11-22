@@ -61,9 +61,13 @@ Nosotros estamos utilizando las siguientes librerias.
 ** Express : Servidor Web.
 ** Socket.IO : Comunicacion tiempo real usando websockets.
 
+
+
 * Inicia el servidor nodejs utilizando el comando 'node app.js'.
 
+* Configura tu arduino para que apunte a la direccion ip de tu maquina y asignale un nombre unico.
 
+* Abri tu navegador en 'http://localhost:3000' y navega los distintos ejemplos.
 
 
 Referencias
