@@ -42,6 +42,19 @@ app.use('/js/bower_components', express.static(__dirname + '/js/bower_components
 app.use('/', routes);
 // assuming POST: temp=foo        <-- URL encoding
 // or       POST: {"temp":"foo"}  <-- JSON encoding
+//Get device preferences
+app.get('/api/v1/status/:id', function(req, res) {
+  
+  var id = req.params.id;
+  models.preferences.findOne( {'deviceId' : id }, function(e, p){
+    if (p){
+      res.json('/' + p.status);
+    }
+    else{
+      res.json({error: true});
+    }
+  });
+});
 app.post('/api/v1/stats', function(req, res) {
   console.log(req.body);
 
@@ -111,6 +124,7 @@ app.post('/api/v1/preferences', function(req, res) {
    models.preferences.findOne( {'deviceId' : deviceId }, function(e, p){
     if (p){
       p.temperature = value,
+      p.status = 'OFF';
       p.save();
       res.json(p);
 
