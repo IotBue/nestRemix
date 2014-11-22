@@ -51,20 +51,26 @@ Bajate mongodb y elegi la mejor version para tu maquina.[MongoDB]
 
 ### Como empezar?
 
-* Inicia el servicio de mongodb. Por default podes hacerlo en la carpeta del package de mongodb y ejecutando: 'bin\mongod -dbpath={carpetaDb}' donde {carpetaDb} es una carpeta donde mongo va a guardar el archivo de base de datos.
+* Inicia el servicio de mongodb. Por default podes hacerlo en la carpeta del package de mongodb y ejecutando: 
+```bash
+$  mongod --dbpath={carpetaDb}
+```
+donde {carpetaDb} es una carpeta donde mongo va a guardar el archivo de base de datos.
 
-*Instala todas las librerias
+* Instala todas las librerias. Utilizando el comando
 
-Utilizando el comando 'npm install' en la carpeta principal del repositorio. 
-Nosotros estamos utilizando las siguientes librerias.
-
-** Mongoose : Comunicacion con MongoDB.
-** Express : Servidor Web.
-** Socket.IO : Comunicacion tiempo real usando websockets.
+```bash
+$ npm install
+```
+ en la carpeta principal del repositorio.  
 
 
 
 * Inicia el servidor nodejs utilizando el comando 'node app.js'.
+
+```bash
+$  node app.js
+```
 
 * Configura tu arduino para que apunte a la direccion ip de tu maquina y asignale un nombre unico.
 
@@ -126,7 +132,7 @@ Authors
 =======
 * [Javier Velazquez Traut] y [Sebastián Freijo] de [CRAN.IO]
 * [Iván Fardjoume] y [Martín Lobato] de [Patagonia Tec]
-* [Martín Rabaglia] de [R/GA Buenos Aires]
+* [Martín Rabaglia] de [R/GA]
 * [Cristian Reynaga] de [IoTBue]
 * [IoTBue]
 
