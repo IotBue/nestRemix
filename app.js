@@ -71,6 +71,7 @@ app.post('/api/v1/stats', function(req, res) {
 
     saveData(m);
     broadcastData(m);
+    
     sendPredictions(m);
     res.json('OK');
 
@@ -185,15 +186,20 @@ function broadcastData(m,p){
 
   for (var i = 0; i < sockets.length; i++) {
     if (sockets[i].room === m.deviceId){
+        
         var socket = sockets[i];
-        var tempMsg = {value: m.temp};
-        io.sockets.in(sockets[i].room).emit('temp',tempMsg);
-        var humidityMsg = {value: m.humidity};
-        io.sockets.in(sockets[i].room).emit('humity', humidityMsg);
-        var pressureMsg = {value: m.pressure};
-        io.sockets.in(sockets[i].room).emit('presure',pressureMsg );
-        var isDeviceOnMsg = {value: m.isDeviceOn};
-        io.sockets.in(sockets[i].room).emit('systemStatus',isDeviceOnMsg);
+        (function(s){models.preferences.findOne( {'deviceId' : m.deviceId }, function(e, p){
+          console.log(p.status);
+          var tempMsg = {value: m.temp};
+          io.sockets.in(s.room).emit('temp',tempMsg);
+          var humidityMsg = {value: m.humidity};
+          io.sockets.in(s.room).emit('humity', humidityMsg);
+          var pressureMsg = {value: m.pressure};
+          io.sockets.in(s.room).emit('presure',pressureMsg );
+          var deviceStatus = {value: p.status};
+          io.sockets.in(s.room).emit('systemStatus',deviceStatus);
+        })
+        })(socket);
         break;
     }
   };
@@ -250,7 +256,7 @@ function sendPredictions(m){
 
 
         
-        //TODO: Broadcast to device?
+        
         models.preferences.findOne( {'deviceId' : m.deviceId }, function(e, p){
             
             console.log('TEMP INT NOW: ' + m.temp);

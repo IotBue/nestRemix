@@ -23,10 +23,13 @@
 
     //Sync Status 
     socket.on('temp', function(data){
+
             $('.temperatura').html(data.value);
             temperatures.push(data.value);
             d3.map(temperatures);
             loadData();
+
+            
 
     });
 
@@ -37,6 +40,12 @@
     socket.on('presure', function(data){
             $('.presion').html(data.value);
     });
+
+    socket.on('systemStatus',function(data){
+        processStatus(data.value);
+    });
+
+
     
     //Load Preferences
     var $roomPreference = $('.room');
@@ -64,25 +73,13 @@
       });
     })
 
-    //Update system status
-    socket.on('status', function(data){
-          $('.status').html(data.value);
-          //if device is on
-          if (data.value=='OFF'){
-            $('.switch').removeClass('theme--user-input');
-            $('.switch').addClass('theme--introduction-to-media');
-          }
-          else {
-            $('.switch').addClass('theme--user-input');
-            $('.switch').removeClass('theme--introduction-to-media');
-          }
-    });
 
 
-        var moments=[];
-        moments.push('9:00');
-        moments.push('14:00');
-        moments.push('20:00');
+    var moments=[];
+    moments.push('9:00');
+    moments.push('14:00');
+    moments.push('20:00');
+
     socket.on('day-predicition', function(data){
 
         
@@ -164,7 +161,24 @@
 
    // push a new data point onto the back
     
-    
+  var processStatus =  function(status){
+    //if device is on
+    $('.status').html(status);
+    console.log(status);
+          if (status=='OFF'){
+            $('.switch').removeClass('theme--user-input');
+            $('.switch').removeClass('theme--multi-device-layout');
+            $('.switch').addClass('theme--introduction-to-media');
+          }else if (status=='COLD'){
+            $('.switch').removeClass('theme--user-input');
+            $('.switch').removeClass('theme--introduction-to-media');
+            $('.switch').addClass('theme--multi-device-layout');
+          }else if (status=='WARM'){
+            $('.switch').removeClass('theme--multi-device-layout');
+            $('.switch').removeClass('theme--introduction-to-media');
+            $('.switch').addClass('theme--user-input');
+          }
+  }    
   var loadData = function () {
       
        // push a new data point onto the back
