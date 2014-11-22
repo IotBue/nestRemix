@@ -1,15 +1,17 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var http = require('http');
-var routes = require('./routes/index');
+var express       = require('express'),
+    path          = require('path'),
+    favicon       = require('static-favicon'),
+    logger        = require('morgan'),
+    cookieParser  = require('cookie-parser'),
+    bodyParser    = require('body-parser'),
+    http          = require('http'),
+    routes        = require('./routes/index'),
+    mongo         = require('./models/mongo-core'),
+    models       = require('./models/models'),
+    bodyParser    = require('body-parser'),
+    geoip         = require('geoip-lite');
 
-var bodyParser = require('body-parser');
-//var geoip = require('geoip-lite');
-
+  
 var app = express();
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
@@ -17,8 +19,11 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
+
 //TODO: MOVE TO ROUTER.
 app.enable('trust proxy');
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,6 +42,19 @@ app.use('/js/bower_components', express.static(__dirname + '/js/bower_components
 app.use('/', routes);
 // assuming POST: temp=foo        <-- URL encoding
 // or       POST: {"temp":"foo"}  <-- JSON encoding
+//Get device preferences
+app.get('/api/v1/status/:id', function(req, res) {
+  
+  var id = req.params.id;
+  models.preferences.findOne( {'deviceId' : id }, function(e, p){
+    if (p){
+      res.json('/' + p.status);
+    }
+    else{
+      res.json({error: true});
+    }
+  });
+});
 app.post('/api/v1/stats', function(req, res) {
   console.log(req.body);
 
@@ -46,37 +64,36 @@ app.post('/api/v1/stats', function(req, res) {
      pressure:  req.body.pressure,
      deviceId:  req.body.deviceId,
   };
+  
+
 
   if(m.temp && m.humidity && m.pressure && m.deviceId){
+
+    saveData(m);
     broadcastData(m);
-    var device = saveData(m);
-    if(device.status)
-      res.json('/' + device.status);
+    sendPredictions(m);
+    res.json('ok');
+
   }
   else{
-    res.json('BAD REQUEST');
+    res.json("ERROR on Data");
   }
-  //var geo = geoip.lookup(req.ip);
-  //console.log(geo);
+
+  console.log(req.ip);
+  var geo = geoip.lookup(req.ip);
+  console.log(geo);
 });
 
 app.get('/api/v1/stats/:id', function(req, res) {
   var id = req.params.id;
-  for (var i = 0; i < devices.length; i++) {
-      console.log(devices[i]);
-      if (devices[i].deviceId === id){
-        console.log(devices[i].preferences);
-        res.json(
-          {
-            deviceId: id , 
-            stats: devices[i].stats
-          });
-      }
-    };
-     res.json(
-          {
-            error:'Not Found',
-          });
+  models.measures.find( {'deviceId' : id }, function(e, p){
+    if (p){
+      res.json(p);
+    }
+    else{
+      res.json({error: true});
+    }
+  });
 
 });
 
@@ -87,37 +104,37 @@ var devices =[];
 app.get('/api/v1/preferences/:id', function(req, res) {
   
   var id = req.params.id;
-  var found = false;
-  for (var i = 0; i < devices.length; i++) {
-    console.log(devices[i]);
-    if (devices[i].deviceId === id){
-      console.log(devices[i].preferences);
-      res.json(
-        {deviceId: id , 
-        value: devices[i].preferences});
-      
+  models.preferences.findOne( {'deviceId' : id }, function(e, p){
+    if (p){
+      res.json(p);
     }
-  };
-  if (!found){
+    else{
       res.json({error: true});
-      // res.end();
-  }
+    }
+  });
 });
+
 
 //Save preferences
 app.post('/api/v1/preferences', function(req, res) {
   
-  var value = req.body.value;
-  var id = req.body.id;
-  for (var i = 0; i < devices.length; i++) {
-    if (devices[i].deviceId === id){
-      devices[i].preferences = value;
-      res.json({result:true});
-      // res.end();
-    }
-  };
+  var value = req.body.temperature;
+  var deviceId = req.body.deviceId;
   
-  // res.end();
+   models.preferences.findOne( {'deviceId' : deviceId }, function(e, p){
+    if (p){
+      p.temperature = value,
+      p.status = 'OFF';
+      p.save();
+      res.json(p);
+
+    }
+    else{
+      res.json({error: true});
+    }
+  });
+
+
 });
 
 
@@ -171,16 +188,12 @@ function broadcastData(m,p){
         var socket = sockets[i];
         var tempMsg = {value: m.temp};
         io.sockets.in(sockets[i].room).emit('temp',tempMsg);
-        //TODO: Reeplace for real value
         var humidityMsg = {value: m.humidity};
         io.sockets.in(sockets[i].room).emit('humity', humidityMsg);
-        //TODO: Reeplace for real value
         var pressureMsg = {value: m.pressure};
         io.sockets.in(sockets[i].room).emit('presure',pressureMsg );
-
-        //TODO: Repleace with real data
-        var statusMsg = {value: m.status};
-        io.sockets.in(sockets[i].room).emit('status',statusMsg);
+        var isDeviceOnMsg = {value: m.isDeviceOn};
+        io.sockets.in(sockets[i].room).emit('systemStatus',isDeviceOnMsg);
         break;
     }
   };
@@ -188,41 +201,30 @@ function broadcastData(m,p){
 }
 
 function saveData(m){
+  console.log('save');
+  //Find device or create
+  models.preferences.findOne( {'deviceId' : m.deviceId }, function(e, p){
 
-  //Add device to connected devices
-  var found = false;
-  //Find device
-  var device; 
-  for (var i = 0; i < devices.length; i++) {
-    if (devices[i].deviceId === m.deviceId){
-      found = true;
-      device = devices[i];
+    if (p){
+      console.log('found', p );
     }
-  };
-  //console.log(found);
-  //If it doesn't exists
-  if (!found){
-    var d = {
-      deviceId: m.deviceId,
-      preferences: 20,
-      status: 'OFF',
-      stats: []
+
+    else{
+      console.log(e);
+      var newP = models.preferences({
+        deviceId: m.deviceId,
+        temperature: 20 //default
+      });
+      newP.save();
     }
-    devices.push(d);
-    device = d;
-    console.log('new device ' + m.deviceId);
-  }
+  });
+  //Save new stats
+  var newStat = new models.measures(m);
+  newStat.save();
+}
 
-  //add new stat
- var stat = {
-    temp: m.temp, 
-    humidity: m.humidity, 
-    pressure:  m.pressure,
-    time: new Date()
-  }
-  device.stats.push(stat);
-
-  //First I go to get more information.
+function sendPredictions(m){
+   //TODO: Right now only for BA.
   http.get("http://api.openweathermap.org/data/2.5/forecast?q=Buenos Aires,AR", function(res) {
     //console.log('STATUS: ' + res.statusCode);
     //console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -246,27 +248,66 @@ function saveData(m){
         var humidityNext = body.list[1].main.humidity;
         var pressureNext = body.list[1].main.pressure;
 
-        console.log('TEMP INT NOW: ' + m.temp);
-        console.log('TEMP INT DES: ' + device.preferences);
-        console.log('TEMP EXT NOW: ' + tempNow);
-        console.log('TEMP EXT NEXT: ' + tempNext);
 
-        //THE GREAT ALGORITHM
-        // (tint - tdes) + dext + dint = 0
-        var dt = m.temp - device.preferences;
-        var dext = tempNext - tempNow;
-        var dint = dt + dext;
+        
+        //TODO: Broadcast to device?
+        models.preferences.findOne( {'deviceId' : m.deviceId }, function(e, p){
+            
+            console.log('TEMP INT NOW: ' + m.temp);
+            console.log('TEMP INT DES: ' + p.temperature);
+            console.log('TEMP EXT NOW: ' + tempNow);
+            console.log('TEMP EXT NEXT: ' + tempNext);
 
-        console.log('DT: ' + dt);
-        console.log('DEXT: ' + dext);
-        console.log('DINT: ' + dint);
+            //THE GREAT ALGORITHM
+            // (tint - tdes) + dext + dint = 0
+            var dt = m.temp - p.temperature;
+            var dext = tempNext - tempNow;
+            var dint = dt + dext;
 
-        if(dint>1.0)
-          device.status='COLD';
-        else if(dint<-1.0)
-          device.status='WARM';
-        else
-          device.status='OFF';
+            console.log('DT: ' + dt);
+            console.log('DEXT: ' + dext);
+            console.log('DINT: ' + dint);
+
+            var status = '';
+            if(dint>1.0){
+              status='COLD';
+            }
+            else if(dint<-1.0){
+              status='WARM';
+            }
+            else{
+              status='OFF';
+            }
+            p.status = status;
+            p.save();
+
+             var predictions =[];
+              for (var i = 1; i < 2; i++) {
+                var prediction = {
+                  //moment of the day  0 - MORNING, 1- AFTERNOON, 2-NIGTH
+                  moment: i,
+                  //from sensors
+                  temperature: m.temp,
+                  //from weather channel api
+                  prediction:Math.round(tempNext * 100) / 100,
+                  //from conculsion from API
+                  temperatureDifference:Math.round(dint * 100) / 100,
+                  //TODO: UPDATE how much it will take to change it
+                  timeToGetThere:0.5,
+                  //status from the system
+                  isDeviceOn:status,
+                };
+                predictions.push(prediction);
+              };
+              for (var i = 0; i < sockets.length; i++) {
+                if (sockets[i].room ===m.deviceId){
+                  io.sockets.in(sockets[i].room).emit('day-predicition',predictions);
+                  break;
+                }
+              }
+
+        });        
+      
       }
       else{
         console.log("No data found for that location");
@@ -275,8 +316,6 @@ function saveData(m){
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
   });
-
-  return device;
 }
 
 
@@ -286,13 +325,13 @@ function saveData(m){
     var temp = Math.floor((Math.random() * 20) + 20);
     var humidity = Math.floor((Math.random() * 100) + 0);
     var pressure = Math.floor((Math.random() * -300) + 1300);
-    var status = 'OFF';
+    var isDeviceOn = Math.random() > 0.5;
 
     var m = {
       temp: temp,
       humidity: humidity,
       pressure: pressure,
-      status: status, 
+      isDeviceOn: isDeviceOn, 
       deviceId: 'arduino01'
     }
     broadcastData(m);
@@ -316,7 +355,7 @@ function saveData(m){
         //how much it will take to change it
         timeToGetThere:Math.floor((Math.random() * 2) + 6),
         //status from the system
-        status: 'OFF',
+        isDeviceOn: Math.random() > 0.5,
       };
       predictions.push(prediction);
     };

@@ -47,7 +47,7 @@
         $('.error').show();
       }
       else {
-        $roomPreference.val(data.value);
+        $roomPreference.val(data.temperature);
         socket.emit('room', deviceId);
       }      
     });
@@ -56,8 +56,8 @@
     $roomPreference.on('change', function(){
       console.log($roomPreference.val());
       var preferences = {
-        value: $roomPreference.val(),
-        id : deviceId
+        temperature: $roomPreference.val(),
+        deviceId : deviceId
       };
       $.post("/api/v1/preferences/", preferences, function( data ) {
         console.log(data);
@@ -89,13 +89,13 @@
         var predictionsHtml = '';
         for (var i = 0; i < data.length; i++) {
           var current = data[i];
-          //TODO: Replace with a nice template engine
           var status = current.status;
+          //TODO: Replace with a nice template engine
             predictionsHtml +='<tr>';
             predictionsHtml +='<td data-th="hora"><code>' + moments[current.moment]+ ' </code></td>';
             predictionsHtml +='<td data-th="availability">'+current.temperature + ' C </td>';
             predictionsHtml +='<td data-th="description">'+ current.prediction +  ' C </td>';
-            predictionsHtml +='<td data-th="description">+' + current.temperatureDifference + ' C in '+ current.timeToGetThere + 'hs -( ' + status +  ')</td>';
+            predictionsHtml +='<td data-th="description">' + current.temperatureDifference + ' C in '+ current.timeToGetThere + 'hs -( ' + current.isDeviceOn  +  ')</td>';
             predictionsHtml +='</tr>';
         };
 
