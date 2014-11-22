@@ -38,6 +38,34 @@ Nuestro proyecto utiliza diferentes proyectos y frameworks de código abierto
 * [Weather API]
 
 
+Setup
+=========
+
+### Node.Js
+
+El servidor que nuclea toda la actividad y comunicacion entre Arduino y el Frontend esta construido utilizando NodeJS. Para usarlo tenes que bajarte Node.js de la pagina oficial y elegi la mejor version para tu maquina. [Node.js]
+
+### Mongo DB
+Bajate mongodb y elegi la mejor version para tu maquina.[MongoDB]
+
+### Como empezar?
+
+* Inicia el servicio de mongodb. Por default podes hacerlo en la carpeta del package de mongodb y ejecutando: 'bin\mongod -dbpath={carpetaDb}' donde {carpetaDb} es una carpeta donde mongo va a guardar el archivo de base de datos.
+
+*Instala todas las librerias
+
+Utilizando el comando 'npm install' en la carpeta principal del repositorio. 
+Nosotros estamos utilizando las siguientes librerias.
+
+** Mongoose : Comunicacion con MongoDB.
+** Express : Servidor Web.
+** Socket.IO : Comunicacion tiempo real usando websockets.
+
+* Inicia el servidor nodejs utilizando el comando 'node app.js'.
+
+
+
+
 Referencias
 =========
 ### Productos
@@ -93,7 +121,7 @@ Authors
 =======
 * [Javier Velazquez Traut] y [Sebastián Freijo] de [CRAN.IO]
 * [Iván Fardjoume] y [Martín Lobato] de [Patagonia Tec]
-* [Martín Rabaglia]
+* [Martín Rabaglia] de [R/GA Buenos Aires]
 * [Cristian Reynaga] de [IoTBue]
 * [IoTBue]
 
@@ -110,6 +138,7 @@ Free to use and specially free to teach!
 [Javier Velazquez Traut]: http://cran.io
 [Sebastián Freijo]: http://cran.io
 [CRAN.IO]: http://cran.io
+[R/GA]: http://www.rga.com
 [Iván Fardjoume]: http://patagoniatecnology.com 
 [Martín Lobato]: http://patagoniatecnology.com
 [Patagonia Tec]: http://patagoniatecnology.com
