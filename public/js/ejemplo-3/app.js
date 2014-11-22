@@ -93,12 +93,12 @@
         for (var i = 0; i < data.length; i++) {
           var current = data[i];
           //TODO: Replace with a nice template engine
-          var status = current.isDeviceOn ? 'ON' : 'OFF'
+  
             predictionsHtml +='<tr>';
             predictionsHtml +='<td data-th="hora"><code>' + moments[current.moment]+ ' </code></td>';
             predictionsHtml +='<td data-th="availability">'+current.temperature + ' C </td>';
             predictionsHtml +='<td data-th="description">'+ current.prediction +  ' C </td>';
-            predictionsHtml +='<td data-th="description">+' + current.temperatureDifference + ' C in '+ current.timeToGetThere + 'hs -( ' + status +  ')</td>';
+            predictionsHtml +='<td data-th="description">' + current.temperatureDifference + ' C in '+ current.timeToGetThere + 'hs -( ' + current.isDeviceOn  +  ')</td>';
             predictionsHtml +='</tr>';
         };
 

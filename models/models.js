@@ -20,6 +20,7 @@ var messureSchema = Schema({
 var preferencesSchema = Schema({
   temperature: Number,
   deviceId: String, 
+  status: String,
   created: { type: Date, default: Date.now },
 }, 
 {

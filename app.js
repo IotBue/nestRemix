@@ -58,11 +58,12 @@ app.post('/api/v1/stats', function(req, res) {
 
     saveData(m);
     broadcastData(m);
-    //sendPrediction(m);
-    res.json("OK");
+    sendPredictions(m);
+    res.json('ok');
+
   }
   else{
-    res.json("ERROR");
+    res.json("ERROR on Data");
   }
 
   console.log(req.ip);
@@ -171,14 +172,10 @@ function broadcastData(m,p){
         var socket = sockets[i];
         var tempMsg = {value: m.temp};
         io.sockets.in(sockets[i].room).emit('temp',tempMsg);
-        //TODO: Reeplace for real value
         var humidityMsg = {value: m.humidity};
         io.sockets.in(sockets[i].room).emit('humity', humidityMsg);
-        //TODO: Reeplace for real value
         var pressureMsg = {value: m.pressure};
         io.sockets.in(sockets[i].room).emit('presure',pressureMsg );
-
-        //TODO: Repleace with real data
         var isDeviceOnMsg = {value: m.isDeviceOn};
         io.sockets.in(sockets[i].room).emit('systemStatus',isDeviceOnMsg);
         break;
@@ -208,28 +205,101 @@ function saveData(m){
   //Save new stats
   var newStat = new models.measures(m);
   newStat.save();
+}
 
-  // //First I go to get more information.
-  // http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
-  //   console.log('STATUS: ' + res.statusCode);
-  //   console.log('HEADERS: ' + JSON.stringify(res.headers));
-  //   // Buffer the body entirely for processing as a whole.
-  //   var bodyChunks = [];
-  //   res.on('data', function(chunk) {
-  //     // You can process streamed parts here...
-  //     bodyChunks.push(chunk);
-  //   }).on('end', function() {
-  //     var bodyRaw = Buffer.concat(bodyChunks);
-  //     console.log('BODY: ' + bodyRaw);
-  //     var body = JSON.parse(bodyRaw);
-  //     console.log('TEMP: ' + body.main.temp);
-  //     console.log('HUM: ' + body.main.humidity);
-  //     console.log('PRES: ' + body.main.pressure);
-  //     // ...and/or process the entire body here.
-  //   })
-  // }).on('error', function(e) {
-  //   console.log("Got error: " + e.message);
-  // });
+function sendPredictions(m){
+   //TODO: Right now only for BA.
+  http.get("http://api.openweathermap.org/data/2.5/forecast?q=Buenos Aires,AR", function(res) {
+    //console.log('STATUS: ' + res.statusCode);
+    //console.log('HEADERS: ' + JSON.stringify(res.headers));
+    // Buffer the body entirely for processing as a whole.
+    var bodyChunks = [];
+    res.on('data', function(chunk) {
+      // You can process streamed parts here...
+      bodyChunks.push(chunk);
+    }).on('end', function() {
+      // ...and/or process the entire body here.
+      var bodyRaw = Buffer.concat(bodyChunks);
+      var body = JSON.parse(bodyRaw);
+      //List exists when data exists
+      if(body.list){
+        //Data from current weather
+        var tempNow = body.list[0].main.temp-273.15;
+        var humidityNow = body.list[0].main.humidity;
+        var pressureNow = body.list[0].main.pressure;
+        //Data from next weather prediction
+        var tempNext = body.list[1].main.temp-273.15;
+        var humidityNext = body.list[1].main.humidity;
+        var pressureNext = body.list[1].main.pressure;
+
+
+        
+        //TODO: Broadcast to device?
+        models.preferences.findOne( {'deviceId' : m.deviceId }, function(e, p){
+            
+            console.log('TEMP INT NOW: ' + m.temp);
+            console.log('TEMP INT DES: ' + p.temperature);
+            console.log('TEMP EXT NOW: ' + tempNow);
+            console.log('TEMP EXT NEXT: ' + tempNext);
+
+            //THE GREAT ALGORITHM
+            // (tint - tdes) + dext + dint = 0
+            var dt = m.temp - p.temperature;
+            var dext = tempNext - tempNow;
+            var dint = dt + dext;
+
+            console.log('DT: ' + dt);
+            console.log('DEXT: ' + dext);
+            console.log('DINT: ' + dint);
+
+            var status = '';
+            if(dint>1.0){
+              status='COLD';
+            }
+            else if(dint<-1.0){
+              status='WARM';
+            }
+            else{
+              status='OFF';
+            }
+            p.status = status;
+            p.save();
+
+             var predictions =[];
+              for (var i = 1; i < 2; i++) {
+                var prediction = {
+                  //moment of the day  0 - MORNING, 1- AFTERNOON, 2-NIGTH
+                  moment: i,
+                  //from sensors
+                  temperature: m.temp,
+                  //from weather channel api
+                  prediction:Math.round(tempNext * 100) / 100,
+                  //from conculsion from API
+                  temperatureDifference:Math.round(dint * 100) / 100,
+                  //TODO: UPDATE how much it will take to change it
+                  timeToGetThere:0.5,
+                  //status from the system
+                  isDeviceOn:status,
+                };
+                predictions.push(prediction);
+              };
+              for (var i = 0; i < sockets.length; i++) {
+                if (sockets[i].room ===m.deviceId){
+                  io.sockets.in(sockets[i].room).emit('day-predicition',predictions);
+                  break;
+                }
+              }
+
+        });        
+      
+      }
+      else{
+        console.log("No data found for that location");
+      }
+    })
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
 }
 
 
