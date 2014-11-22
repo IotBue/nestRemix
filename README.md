@@ -50,12 +50,7 @@ Nuestro proyecto utiliza diferentes proyectos y frameworks de código abierto
 * [Weather API]
 
 
-### To Do
-- Update Documentation
-- Create slides
-- Create Graphics and schematics
-
-Reference
+Referencias
 =========
 
 * [Smart Citizen Kit] 
@@ -79,7 +74,7 @@ Instalación
 Authors
 =======
 * [Javier Velazquez Traut] y [Sebastián Freijo] de [CRAN.IO]
-* [Patagonia Tec]
+* [Iván Fardjoume] y [Martín Lobato] de [Patagonia Tec]
 * [Martín Rabaglia]
 * [Cristian Reynaga] de [IoTBue]
 * [IoTBue]
@@ -96,8 +91,10 @@ Free to use and specially free to teach!
 
 [AngularJS]: http://angularjs.org
 [Javier Velazquez Traut]: http://cran.io
-[Sebi]: http://cran.io
+[Sebastián Freijo]: http://cran.io
 [CRAN.IO]: http://cran.io
+[Iván Fardjoume]: http://patagoniatecnology.com 
+[Martín Lobato]: http://patagoniatecnology.com
 [Patagonia Tec]: http://patagoniatecnology.com
 [Martín Rabaglia]: http://twitter.com/sr_humo
 [Cristian Reynaga]: http://cristianreynaga.com
