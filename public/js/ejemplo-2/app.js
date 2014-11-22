@@ -19,7 +19,7 @@
     else {
       socket = io(serverName);
     }
-    
+    socket.emit('room', 'arduino01');
     socket.on('temp', function(data){
             $('.temperatura').html(data.value);
             temperatures.push(data.value);
