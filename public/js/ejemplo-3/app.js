@@ -47,7 +47,7 @@
         $('.error').show();
       }
       else {
-        $roomPreference.val(data.value);
+        $roomPreference.val(data.temperature);
         socket.emit('room', deviceId);
       }      
     });
@@ -56,8 +56,8 @@
     $roomPreference.on('change', function(){
       console.log($roomPreference.val());
       var preferences = {
-        value: $roomPreference.val(),
-        id : deviceId
+        temperature: $roomPreference.val(),
+        deviceId : deviceId
       };
       $.post("/api/v1/preferences/", preferences, function( data ) {
         console.log(data);

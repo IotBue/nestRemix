@@ -101,23 +101,25 @@ app.get('/api/v1/preferences/:id', function(req, res) {
   });
 });
 
+
 //Save preferences
 app.post('/api/v1/preferences', function(req, res) {
   
-  var value = req.body.value;
-  devices[i].preferences = value;
-  models.preferences.findOne( {'deviceId' : id }, function(e, p){
-    console.log(restaurant.menuCategory);  
+  var value = req.body.temperature;
+  var deviceId = req.body.deviceId;
+  
+   models.preferences.findOne( {'deviceId' : deviceId }, function(e, p){
     if (p){
-      // res.json(p);
       p.temperature = value,
       p.save();
       res.json(p);
+
     }
     else{
       res.json({error: true});
     }
   });
+
 
 });
 
