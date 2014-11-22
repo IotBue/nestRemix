@@ -65,19 +65,16 @@
     })
 
     //Update system status
-    socket.on('systemStatus', function(data){
+    socket.on('status', function(data){
+          $('.status').html(data.value);
           //if device is on
-          if (data.value){
-            $('.switch').addClass('theme--user-input');
-            $('.switch').removeClass('theme--introduction-to-media');
-
-            $('.status').html('ON');
-
-          }
-          else {
+          if (data.value=='OFF'){
             $('.switch').removeClass('theme--user-input');
             $('.switch').addClass('theme--introduction-to-media');
-            $('.status').html('OFF');
+          }
+          else {
+            $('.switch').addClass('theme--user-input');
+            $('.switch').removeClass('theme--introduction-to-media');
           }
     });
 
@@ -93,7 +90,7 @@
         for (var i = 0; i < data.length; i++) {
           var current = data[i];
           //TODO: Replace with a nice template engine
-          var status = current.isDeviceOn ? 'ON' : 'OFF'
+          var status = current.status;
             predictionsHtml +='<tr>';
             predictionsHtml +='<td data-th="hora"><code>' + moments[current.moment]+ ' </code></td>';
             predictionsHtml +='<td data-th="availability">'+current.temperature + ' C </td>';

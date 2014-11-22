@@ -8,9 +8,8 @@ var http = require('http');
 var routes = require('./routes/index');
 
 var bodyParser = require('body-parser');
-var geoip = require('geoip-lite');
+//var geoip = require('geoip-lite');
 
-  
 var app = express();
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
@@ -18,11 +17,8 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-
 //TODO: MOVE TO ROUTER.
 app.enable('trust proxy');
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,23 +46,18 @@ app.post('/api/v1/stats', function(req, res) {
      pressure:  req.body.pressure,
      deviceId:  req.body.deviceId,
   };
-  
-
 
   if(m.temp && m.humidity && m.pressure && m.deviceId){
-
-    saveData(m);
     broadcastData(m);
-    //sendPrediction(m);
-    res.json("OK");
+    var device = saveData(m);
+    if(device.status)
+      res.json('/' + device.status);
   }
   else{
-    res.json("ERROR");
+    res.json('BAD REQUEST');
   }
-
-  console.log(req.ip);
-  var geo = geoip.lookup(req.ip);
-  console.log(geo);
+  //var geo = geoip.lookup(req.ip);
+  //console.log(geo);
 });
 
 app.get('/api/v1/stats/:id', function(req, res) {
@@ -188,8 +179,8 @@ function broadcastData(m,p){
         io.sockets.in(sockets[i].room).emit('presure',pressureMsg );
 
         //TODO: Repleace with real data
-        var isDeviceOnMsg = {value: m.isDeviceOn};
-        io.sockets.in(sockets[i].room).emit('systemStatus',isDeviceOnMsg);
+        var statusMsg = {value: m.status};
+        io.sockets.in(sockets[i].room).emit('status',statusMsg);
         break;
     }
   };
@@ -208,12 +199,13 @@ function saveData(m){
       device = devices[i];
     }
   };
-  console.log(found);
+  //console.log(found);
   //If it doesn't exists
   if (!found){
     var d = {
       deviceId: m.deviceId,
       preferences: 20,
+      status: 'OFF',
       stats: []
     }
     devices.push(d);
@@ -230,27 +222,61 @@ function saveData(m){
   }
   device.stats.push(stat);
 
-  // //First I go to get more information.
-  // http.get("http://api.openweathermap.org/data/2.5/weather?q=London,uk", function(res) {
-  //   console.log('STATUS: ' + res.statusCode);
-  //   console.log('HEADERS: ' + JSON.stringify(res.headers));
-  //   // Buffer the body entirely for processing as a whole.
-  //   var bodyChunks = [];
-  //   res.on('data', function(chunk) {
-  //     // You can process streamed parts here...
-  //     bodyChunks.push(chunk);
-  //   }).on('end', function() {
-  //     var bodyRaw = Buffer.concat(bodyChunks);
-  //     console.log('BODY: ' + bodyRaw);
-  //     var body = JSON.parse(bodyRaw);
-  //     console.log('TEMP: ' + body.main.temp);
-  //     console.log('HUM: ' + body.main.humidity);
-  //     console.log('PRES: ' + body.main.pressure);
-  //     // ...and/or process the entire body here.
-  //   })
-  // }).on('error', function(e) {
-  //   console.log("Got error: " + e.message);
-  // });
+  //First I go to get more information.
+  http.get("http://api.openweathermap.org/data/2.5/forecast?q=Buenos Aires,AR", function(res) {
+    //console.log('STATUS: ' + res.statusCode);
+    //console.log('HEADERS: ' + JSON.stringify(res.headers));
+    // Buffer the body entirely for processing as a whole.
+    var bodyChunks = [];
+    res.on('data', function(chunk) {
+      // You can process streamed parts here...
+      bodyChunks.push(chunk);
+    }).on('end', function() {
+      // ...and/or process the entire body here.
+      var bodyRaw = Buffer.concat(bodyChunks);
+      var body = JSON.parse(bodyRaw);
+      //List exists when data exists
+      if(body.list){
+        //Data from current weather
+        var tempNow = body.list[0].main.temp-273.15;
+        var humidityNow = body.list[0].main.humidity;
+        var pressureNow = body.list[0].main.pressure;
+        //Data from next weather prediction
+        var tempNext = body.list[1].main.temp-273.15;
+        var humidityNext = body.list[1].main.humidity;
+        var pressureNext = body.list[1].main.pressure;
+
+        console.log('TEMP INT NOW: ' + m.temp);
+        console.log('TEMP INT DES: ' + device.preferences);
+        console.log('TEMP EXT NOW: ' + tempNow);
+        console.log('TEMP EXT NEXT: ' + tempNext);
+
+        //THE GREAT ALGORITHM
+        // (tint - tdes) + dext + dint = 0
+        var dt = m.temp - device.preferences;
+        var dext = tempNext - tempNow;
+        var dint = dt + dext;
+
+        console.log('DT: ' + dt);
+        console.log('DEXT: ' + dext);
+        console.log('DINT: ' + dint);
+
+        if(dint>1.0)
+          device.status='COLD';
+        else if(dint<-1.0)
+          device.status='WARM';
+        else
+          device.status='OFF';
+      }
+      else{
+        console.log("No data found for that location");
+      }
+    })
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
+
+  return device;
 }
 
 
@@ -260,13 +286,13 @@ function saveData(m){
     var temp = Math.floor((Math.random() * 20) + 20);
     var humidity = Math.floor((Math.random() * 100) + 0);
     var pressure = Math.floor((Math.random() * -300) + 1300);
-    var isDeviceOn = Math.random() > 0.5;
+    var status = 'OFF';
 
     var m = {
       temp: temp,
       humidity: humidity,
       pressure: pressure,
-      isDeviceOn: isDeviceOn, 
+      status: status, 
       deviceId: 'arduino01'
     }
     broadcastData(m);
@@ -290,7 +316,7 @@ function saveData(m){
         //how much it will take to change it
         timeToGetThere:Math.floor((Math.random() * 2) + 6),
         //status from the system
-        isDeviceOn: Math.random() > 0.5,
+        status: 'OFF',
       };
       predictions.push(prediction);
     };
