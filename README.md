@@ -75,6 +75,8 @@ EVRYTHNG provides a range of managed applications to help make products smart. T
 
 * [IoT Report, Goldman Sachs]
 
+* [Career Watch: Internet of Things]
+
 * [The Internet of Things and Wearable Technology, Adam Thierer]
 
 
@@ -128,7 +130,7 @@ Free to use and specially free to teach!
 [Net of everything]: http://netofeverything.blogspot.com.ar/
 [The epic struggle of the Internet of Things]: http://www.amazon.com/The-Epic-Struggle-Internet-Things-ebook/dp/B00N8AIFYC
 [The Internet of Things. How the Next Evolution of the Internet Is Changing Everything]:http://www.cisco.com/web/about/ac79/docs/innov/IoT_IBSG_0411FINAL.pdf
-[Iot Report Goldman Sachs]: http://www.goldmansachs.com/our-thinking/outlook/internet-of-things/iot-report.pdf
-[ ]http://www.pmi.org/~/media/PDF/Professional-Development/Career-Watch-Internet-of-Things.ashx
+[IoT Report, Goldman Sachs]: http://www.goldmansachs.com/our-thinking/outlook/internet-of-things/iot-report.pdf
+[Career Watch: Internet of Things]: http://www.pmi.org/~/media/PDF/Professional-Development/Career-Watch-Internet-of-Things.ashx
 [The Internet of Things and Wearable Technology, Adam Thierer]: http://mercatus.org/sites/default/files/Thierer-Wearable-Tech.pdf
 [IoT Resources]: http://postscapes.com/internet-of-things-resources/
