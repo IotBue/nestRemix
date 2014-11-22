@@ -5,17 +5,6 @@ Nest Remix
 Nest Remix is a open source project developed to teach with a little first project about Internet of Things.
 Este proyecto se realizó como eje de los contenidos para el primer taller del Meetup de Internet of Things en Buenos Aires. 
 
-Equipo:
-el objetivo de este prototipo es tener:
-* a) conectar arduino con los sensores y visualizarlos en el Serial Console con Serial.println()
-* b) conectar arduino con node y visualizar los datos crudos en un html local
-* c) conectar arduino con node y visualizar los datos en Heroku
-* d) conectar arduino con node y visualizar los datos en Heroku con D3.js y guardando en MongoDB
-* e) conectar arduino con node, levantar data geolocalizada de Weather Channel API y visualizar la comparación
-* f) conectar arduino con node, API, e ir seteando nuestra preferencia de temp
-* g) conectar arduino con node, API, setear nuestra preferencia de temp y actuar sobre arduino con Relé
-
-
 Este remix que proponemos recorre diferentes estadios de sensado y conectividad para llegar desde una unidad simple de medición de temperatura hasta un sistema inteligente de medición y control de hardware conectado a una base de datos que guarda las preferencias y contrapone contra la API de Weather Channel para establecer coeficientes de temperatura y disminuir las diferencias.
 
 Pasaremos del funcionamiento de una placa Arduino y recibir en nuestra computadora el valor de temperatura del sensor DHT11, agregando luego la conexión a una página web local que muestre estos valores, avanzaremos en la implementación de una gráfica en D3.js para visualizar en tiempo real, y luego finalizaremos nuestra implementación en un servicio on line (Heroku) para tener control de nuestro dispositivo conectado por cable de red a internet.
@@ -75,6 +64,8 @@ EVRYTHNG provides a range of managed applications to help make products smart. T
 
 * [Net of everything]
 
+* [IoT Resources]
+
 
 ### Bibliografía
 
@@ -83,6 +74,8 @@ EVRYTHNG provides a range of managed applications to help make products smart. T
 * [The Internet of Things. How the Next Evolution of the Internet Is Changing Everything]
 
 * [IoT Report, Goldman Sachs]
+
+* [The Internet of Things and Wearable Technology, Adam Thierer]
 
 
 Instalación
@@ -101,7 +94,6 @@ Authors
 * [Martín Rabaglia]
 * [Cristian Reynaga] de [IoTBue]
 * [IoTBue]
-
 
 
 License
@@ -137,3 +129,6 @@ Free to use and specially free to teach!
 [The epic struggle of the Internet of Things]: http://www.amazon.com/The-Epic-Struggle-Internet-Things-ebook/dp/B00N8AIFYC
 [The Internet of Things. How the Next Evolution of the Internet Is Changing Everything]:http://www.cisco.com/web/about/ac79/docs/innov/IoT_IBSG_0411FINAL.pdf
 [Iot Report Goldman Sachs]: http://www.goldmansachs.com/our-thinking/outlook/internet-of-things/iot-report.pdf
+[ ]http://www.pmi.org/~/media/PDF/Professional-Development/Career-Watch-Internet-of-Things.ashx
+[The Internet of Things and Wearable Technology, Adam Thierer]: http://mercatus.org/sites/default/files/Thierer-Wearable-Tech.pdf
+[IoT Resources]: http://postscapes.com/internet-of-things-resources/
