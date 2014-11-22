@@ -13,19 +13,24 @@ DHT dht(DHTPIN, DHTTYPE);
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 unsigned int port = 80;
 String server = "nest-remix.herokuapp.com";
-String path = "/api/v1/stats";
+String postPath = "/api/v1/stats";
+String getPath = "/api/v1/status/";
 float time=0.0f;
-#define TIMER_DELAY 5.0f
+#define TIMER_DELAY 1.0f
 float timer=TIMER_DELAY;
 
 IPAddress ip(192,168,0,177);
 
 EthernetClient client;
 
+bool posting; // or getting
 char Status;
 double T1,P; //BMP180
 double T2,H; //DHT11
 String DeviceID = "arduino20";
+
+#define PIN_VENTILADOR 42
+#define PIN_LAMPARITA 44
 
 void setup() {
   Serial.begin(115200);
@@ -51,7 +56,13 @@ void setup() {
     Serial.println("connection failed");
   }
   
+  pinMode(PIN_LAMPARITA,OUTPUT);
+  pinMode(PIN_VENTILADOR,OUTPUT);
+  digitalWrite(PIN_LAMPARITA,HIGH);
+  digitalWrite(PIN_VENTILADOR,HIGH);
+
   time=millis()/1000.0f;
+  posting=true;
 }
 
 void loop()
@@ -67,27 +78,37 @@ void loop()
       response+=(char)client.read();
     }
     //Serial.println(response);
-    parsearMensaje(response.c_str(),response.length());
+    if(!posting){
+      parsearMensaje(response.c_str(),response.length());
+    }
+    posting=!posting;
     timer=TIMER_DELAY;
   }
   
   if(timer>0.0f){
     timer-=dt;
     if(timer<=0.0f){
-      leerSensores();
-      //JSON: {"deviceId":"DeviceID","temp":"T","humidity":"H","pressure":"P"}
-      String body = "{\"deviceId\":\"";
-      body += DeviceID;
-      body += "\",\"temp\":\"";
-      body += T1;
-      body += "\",\"humidity\":\"";
-      body += H;
-      body += "\",\"pressure\":\"";
-      body += P;
-      body += "\"}";
-      Serial.print("Posteo: ");
-      Serial.println(body);
-      postearMensaje(body.c_str(),body.length());
+      if(posting){
+        leerSensores();
+        //JSON: {"deviceId":"DeviceID","temp":"T","humidity":"H","pressure":"P"}
+        String body = "{\"deviceId\":\"";
+        body += DeviceID;
+        body += "\",\"temp\":\"";
+        body += T1;
+        body += "\",\"humidity\":\"";
+        body += H;
+        body += "\",\"pressure\":\"";
+        body += P;
+        body += "\"}";
+        Serial.print("Posteo: ");
+        Serial.println(body);
+        postearMensaje(body.c_str(),body.length());
+      }
+      else{
+        Serial.print("Geteo: ");
+        Serial.println(DeviceID);
+        getearMensaje(DeviceID.c_str());
+      }
     }
   }
   
@@ -121,7 +142,7 @@ void leerSensores() {
 void postearMensaje(const char * body, unsigned int len) {
   // Make a HTTP request:                     
   client.print("POST ");
-  client.print(path);
+  client.print(postPath);
   client.println(" HTTP/1.1");
   client.print("Host: ");
   client.println(server);
@@ -131,6 +152,18 @@ void postearMensaje(const char * body, unsigned int len) {
   client.println(len);
   client.println();
   client.println(body);  
+}
+
+void getearMensaje(const char * id) {
+  // Make a HTTP request:                     
+  client.print("GET ");
+  client.print(getPath);
+  client.print(id);
+  client.println(" HTTP/1.1");
+  client.print("Host: ");
+  client.println(server);
+  client.println("Connection: keep-alive");
+  client.println();
 }
 
 void parsearMensaje(const char * response, unsigned int len) {
@@ -144,15 +177,21 @@ void parsearMensaje(const char * response, unsigned int len) {
         Serial.println(str);
         if(str.equals("COLD")){
           //PRENDO FRIO
+          digitalWrite(PIN_VENTILADOR,LOW);
           //APAGO CALOR
+          digitalWrite(PIN_LAMPARITA,HIGH);
         }
         else if(str.equals("WARM")){
           //PRENDO CALOR
+          digitalWrite(PIN_LAMPARITA,LOW);
           //APAGO FRIO
+          digitalWrite(PIN_VENTILADOR,HIGH);
         }
         else{
-          //APAGO FRIO
           //APAGO CALOR
+          digitalWrite(PIN_VENTILADOR,HIGH);
+          //APAGO FRIO
+          digitalWrite(PIN_LAMPARITA,HIGH);
         }
         return;
       }

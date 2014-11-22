@@ -72,7 +72,7 @@ app.post('/api/v1/stats', function(req, res) {
     saveData(m);
     broadcastData(m);
     sendPredictions(m);
-    res.json('ok');
+    res.json('OK');
 
   }
   else{
