@@ -32,6 +32,7 @@ Nuestro proyecto utiliza diferentes proyectos y frameworks de código abierto
 * [Node.js]
 * [Express]
 * [Bower]
+* [Postman]
 * [MongoDB]
 * [Arduino]
 * [Heroku]
@@ -137,7 +138,7 @@ Free to use and specially free to teach!
 
 **Enjoy, learn and collaborate!**
 
-
+[Postman]: https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en
 [AngularJS]: http://angularjs.org
 [Javier Velazquez Traut]: http://cran.io
 [Sebastián Freijo]: http://cran.io
