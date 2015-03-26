@@ -1,4 +1,5 @@
 var express       = require('express'),
+    bodyParser    = require('body-parser'),
     path          = require('path'),
     favicon       = require('static-favicon'),
     logger        = require('morgan'),
@@ -7,10 +8,7 @@ var express       = require('express'),
     http          = require('http'),
     routes        = require('./routes/index'),
     mongo         = require('./models/mongo-core'),
-    models       = require('./models/models'),
-    bodyParser    = require('body-parser'),
-    geoip         = require('geoip-lite');
-
+    models       = require('./models/models');
   
 var app = express();
 
@@ -189,15 +187,20 @@ function broadcastData(m,p){
         
         var socket = sockets[i];
         (function(s){models.preferences.findOne( {'deviceId' : m.deviceId }, function(e, p){
-          console.log(p.status);
-          var tempMsg = {value: m.temp};
-          io.sockets.in(s.room).emit('temp',tempMsg);
-          var humidityMsg = {value: m.humidity};
-          io.sockets.in(s.room).emit('humity', humidityMsg);
-          var pressureMsg = {value: m.pressure};
-          io.sockets.in(s.room).emit('presure',pressureMsg );
-          var deviceStatus = {value: p.status};
-          io.sockets.in(s.room).emit('systemStatus',deviceStatus);
+          try{
+            console.log(p.status);
+            var tempMsg = {value: m.temp};
+            io.sockets.in(s.room).emit('temp',tempMsg);
+            var humidityMsg = {value: m.humidity};
+            io.sockets.in(s.room).emit('humity', humidityMsg);
+            var pressureMsg = {value: m.pressure};
+            io.sockets.in(s.room).emit('presure',pressureMsg );
+            var deviceStatus = {value: p.status};
+            io.sockets.in(s.room).emit('systemStatus',deviceStatus);
+          }
+          catch(e){
+            console.log('No information for:' + m.deviceId);
+          } 
         })
         })(socket);
         break;
